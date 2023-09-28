@@ -34,4 +34,29 @@ fetch('http://localhost:5678/api/works')
     console.error('Une erreur s\'est produite :', error);
   });
 
+// fin de code gallery
 
+// category
+
+// faite une requête HTTP pour récupérer les donné depuis l'url
+fetch('http://localhost:5678/api/categories')
+.then(response => {
+   return response.json();
+})
+.then( data => {
+// Stockez les données dans une variable
+    const categories = data;
+
+// Parcourez les données et affichez-les dans la console
+    for (let i= 0; i< categories.length; i++) {
+    const category = categories [i];
+    console.log(`ID: ${category.id}, Name: ${category.name}`);
+    }
+})
+.catch( error => {
+    console.log('une erreur s\'est produite lors de la récupération de données :', error);
+});
+
+// fin de le partie récupération de données 
+
+// fcategory and filter
