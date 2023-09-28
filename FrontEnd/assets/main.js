@@ -48,7 +48,7 @@ fetch('http://localhost:5678/api/categories')
     const categories = data;
 
 // Parcourez les données et affichez-les dans la console
-    for (let i= 0; i< categories.length; i++) {
+    for (let i = 0; i < categories.length; i++) {
     const category = categories [i];
     console.log(`ID: ${category.id}, Name: ${category.name}`);
     }
