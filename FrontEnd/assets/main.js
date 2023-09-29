@@ -1,62 +1,106 @@
-// gallery 
-
 // Sélectionnez l'élément .gallery dans lequel vous souhaitez afficher les projets
 const galleryElement = document.querySelector(".gallery");
+let projects = []; // Déclarez une variable pour stocker les projets
 
-// Effectuez une requête GET pour récupérer les données de l'API
+// Fonction pour créer la structure HTML d'un projet
+function createProjectElement(project) {
+  const figureElement = document.createElement("figure");
+  const imgElement = document.createElement("img");
+  const figcaptionElement = document.createElement("figcaption");
+
+  // Définissez l'attribut src de l'image en utilisant l'URL de l'image du projet
+  imgElement.src = project.imageUrl;
+
+  // Définissez le texte du figcaption en utilisant le titre du projet
+  figcaptionElement.textContent = project.title;
+
+  // Ajoutez l'image et le figcaption à la figure
+  figureElement.appendChild(imgElement);
+  figureElement.appendChild(figcaptionElement);
+
+  return figureElement;
+}
+
+
+// Fonction pour créer la galerie de projets
+function createGallery(projects) {
+  // Effacez le contenu existant de la galerie
+  galleryElement.innerHTML = "";
+
+  // Parcourez les données récupérées et affichez-les dans la galerie
+  for (const project of projects) {
+    const projectElement = createProjectElement(project);
+    // Ajoutez le projet à la galerie
+    galleryElement.appendChild(projectElement);
+  }
+}
+
+
+// Effectuez une requête GET pour récupérer les données de l'API des projets
 fetch('http://localhost:5678/api/works')
   .then(response => {
     return response.json();
   }) 
-  .then((projects) => {
-    // Parcourez les données récupérées et affichez-les dans la galerie
-    for (const project of projects) {
-      const figureElement = document.createElement("figure");
-      const imgElement = document.createElement("img");
-      const figcaptionElement = document.createElement("figcaption");
+  .then((data) => {
+    projects = data; // Stockez les projets dans la variable projects
+    // Affichez tous les projets par défaut
+    createGallery(projects);
 
-      // Définissez l'attribut src de l'image en utilisant l'URL de l'image du projet
-      imgElement.src = project.imageUrl;
-
-      // Définissez le texte du figcaption en utilisant le titre du projet
-      figcaptionElement.textContent = project.title;
-
-      // Ajoutez l'image et le figcaption à la figure
-      figureElement.appendChild(imgElement);
-      figureElement.appendChild(figcaptionElement);
-
-      // Ajoutez la figure à la galerie
-      galleryElement.appendChild(figureElement);
-    }
-    console.log(projects)
+    // ... Le reste de votre code pour gérer les catégories et le filtrage
   })
   .catch(error => {
-    console.error('Une erreur s\'est produite :', error);
+    console.error('Une erreur s\'est produite lors de la récupération des projets :', error);
   });
 
-// fin de code gallery
 
-// category
+// categories and filter
+function createFilterButtons(categories) {
+  const filterButtonsContainer = document.getElementById("filter__btn");
 
-// faite une requête HTTP pour récupérer les donné depuis l'url
+  // Créez le bouton "Tous"
+  const allButton = document.createElement("button");
+  allButton.innerText = "Tous";
+  allButton.classList.add("btn");
+  allButton.id = "all";
+  filterButtonsContainer.appendChild(allButton);
+
+  // Créez des boutons pour chaque catégorie en utilisant les données des catégories
+  categories.forEach((category) => {
+    const filterButton = document.createElement("button");
+    filterButton.innerText = category.name;
+    filterButton.name = category.id;
+    filterButton.classList.add("btn");
+    filterButtonsContainer.appendChild(filterButton);
+  });
+
+  // Gérez les clics sur les boutons de filtrage
+  const allFilterButtons = document.querySelectorAll(".btn");
+  allFilterButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const buttonId = e.target.name;
+      if (buttonId === "") {
+        // Affichez tous les projets
+        createGallery(projects);
+      } else {
+        // Filtrer les projets par catégorie
+        const filteredArray = projects.filter(
+          (project) => project.categoryId == buttonId
+        );
+        createGallery(filteredArray);
+      }
+    });
+  });
+}
+
+// Utilisez les données des catégories depuis l'API pour créer les boutons de filtre
 fetch('http://localhost:5678/api/categories')
-.then(response => {
-   return response.json();
-})
-.then( data => {
-// Stockez les données dans une variable
-    const categories = data;
-
-// Parcourez les données et affichez-les dans la console
-    for (let i = 0; i < categories.length; i++) {
-    const category = categories [i];
-    console.log(`ID: ${category.id}, Name: ${category.name}`);
-    }
-})
-.catch( error => {
-    console.log('une erreur s\'est produite lors de la récupération de données :', error);
-});
-
-// fin de le partie récupération de données 
-
-// fcategory and filter
+  .then(response => {
+    return response.json();
+  })
+  .then((categories) => {
+    // Appelez la fonction pour créer les boutons de filtre avec les données des catégories
+    createFilterButtons(categories);
+  })
+  .catch(error => {
+    console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
+  });
