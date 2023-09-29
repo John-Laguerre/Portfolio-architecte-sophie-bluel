@@ -1,4 +1,4 @@
-// Sélectionnez l'élément .gallery dans lequel vous souhaitez afficher les projets
+// Sélectionne l'élément .gallery dans lequel je souhaite afficher les projets
 const galleryElement = document.querySelector(".gallery");
 let projects = []; // Déclarez une variable pour stocker les projets
 
@@ -8,13 +8,13 @@ function createProjectElement(project) {
   const imgElement = document.createElement("img");
   const figcaptionElement = document.createElement("figcaption");
 
-  // Définissez l'attribut src de l'image en utilisant l'URL de l'image du projet
+  // Définis l'attribut src de l'image en utilisant l'URL de l'image du projet
   imgElement.src = project.imageUrl;
 
-  // Définissez le texte du figcaption en utilisant le titre du projet
+  // Définis le texte du figcaption en utilisant le titre du projet
   figcaptionElement.textContent = project.title;
 
-  // Ajoutez l'image et le figcaption à la figure
+  // Ajout de l'image et le figcaption à la figure
   figureElement.appendChild(imgElement);
   figureElement.appendChild(figcaptionElement);
 
