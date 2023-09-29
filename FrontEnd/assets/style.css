@@ -125,6 +125,51 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+/* gestion des btn catégories */
+#filter__btn {
+	display: flex;
+	justify-content: center;
+	height: 37px;
+	margin-bottom: 3em;
+	gap: 10px;
+}
+
+#filter__btn .btn {
+	background: none;
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	color: #1D6154;
+	font-family: Syne;
+	font-size: 16px;
+	font-weight: 700;
+	height: 37px; 
+	cursor: pointer;
+}
+
+#filter__btn .btn:hover {
+	color: #fff;
+	background-color: #1D6154;
+}
+/* fin de gestion des btn categories */
+
+/* gestion des largeurs spécifiques pour les boutons */
+#filter__btn .btn:nth-child(1) {
+	width: 100px;
+}
+
+#filter__btn .btn:nth-child(2) {
+	width: 100px; 
+}
+
+#filter__btn .btn:nth-child(3) {
+	width: 157px;
+}
+
+#filter__btn .btn:nth-child(4) {
+	width: 198px;
+}
+/* fin de la gestion des largeurs */
 .gallery {
 	width: 100%;
 	display: grid;
