@@ -13,7 +13,7 @@ dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
+figure, figcaption, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -25,7 +25,7 @@ time, mark, audio, video {
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
@@ -48,15 +48,19 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
-	margin:auto;
+	max-width: 100%;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background: #FFFEF8;
 }
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 50px 150px 150px;
+}
+
+main {
+	margin: 0 150px;
 }
 section {
 	margin: 50px 0
@@ -184,7 +188,7 @@ li:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -225,9 +229,62 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
-footer nav ul {
+/* gestion de login */
+
+.login {
+	width: 50%;
+	margin: auto;
+	margin-bottom: 200px;
+}
+
+.login > * {
+	text-align: center;
+}
+
+.login h2 {
+	margin-bottom: 20px;
+}
+
+.login form {
+	text-align: left;
+	margin-top:30px;
 	display: flex;
+	flex-direction: column;
+}
+
+.login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.login__mdpoublie {
+	text-align: center;
+	color: #3D3D3D;
+}
+
+.login label {
+	margin: 2em 0 1em 0;
+}
+
+
+/* fin de gestion style login */ 
+
+footer {
+	display: flex;
+	height: 60px;
 	justify-content: flex-end;
-	margin: 2em
+	background: #fff;
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	position: relative;
+	right: 107px;
+}
+.info_hover:hover {
+	color: #B1663C;
 }
 
