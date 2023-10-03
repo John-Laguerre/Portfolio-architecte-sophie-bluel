@@ -48,7 +48,7 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 100%;
+	max-width: 1440px;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background: #FFFEF8;
