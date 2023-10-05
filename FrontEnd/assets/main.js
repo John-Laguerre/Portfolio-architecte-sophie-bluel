@@ -133,10 +133,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (response.status === 200) {
-          // Authentification réussie, stockez le token et redirigez
-          // vers la page d'accueil
+          // Authentification réussie, stockez le token
           const data = await response.json();
           window.localStorage.setItem("token", data.token);
+        
+          // Redirigez vers la page d'accueil
+          window.location.href = 'index.html';
         } else {
           // Authentification échouée, affichez un message d'erreur
           errorMessage.textContent =
