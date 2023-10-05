@@ -148,5 +148,16 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error(error);
       }
     });
+    // Partie 7 : Mettez en évidence le lien "login" si vous êtes sur la page "login.html"
+    const loginLink = document.querySelector("li#login-link");
+
+    // Récupérez le nom de la page actuelle
+    const currentPage = window.location.pathname.split("/").pop();
+    
+    // Vérifiez si la page actuelle est "login.html"
+    if (currentPage === "login.html") {
+    // Ajoutez une classe ou un style pour mettre en évidence le lien "login"
+    loginLink.classList.add("active"); // Vous devez définir les styles pour la classe "active" dans votre CSS
+    }
   }
 });
