@@ -104,6 +104,32 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
       });
 
+    // Récupérez la fenêtre modale
+    const modal = document.getElementById("myModal");
+
+    // Récupérez le bouton "Modifier" qui ouvrira la fenêtre modale
+    const openModalButton = document.getElementById("openModalButton");
+
+    // Récupérez l'élément de fermeture de la fenêtre modale (la croix)
+    const closeButton = document.querySelector(".close");
+
+    // Gestionnaire d'événements pour ouvrir la fenêtre modale
+    openModalButton.addEventListener("click", function () {
+      modal.style.display = "block";
+    });
+
+    // Gestionnaire d'événements pour fermer la fenêtre modale en cliquant sur la croix
+    closeButton.addEventListener("click", function () {
+      modal.style.display = "none";
+    });
+
+    // Gestionnaire d'événements pour fermer la fenêtre modale en cliquant en dehors de celle-ci
+    window.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
   } else {
     // Sinon, vous êtes sur "login.html"
     const loginForm = document.getElementById("loginForm");
