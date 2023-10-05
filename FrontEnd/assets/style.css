@@ -96,7 +96,8 @@ nav ul {
 }
 nav li {
 	padding: 0 10px;
-	font-size: 1.2em;
+	font-weight: 400;
+	font-size: 16px;
 	cursor: pointer;
 }
 
@@ -268,6 +269,12 @@ input[type="submit"]{
 	margin: 2em 0 1em 0;
 }
 
+
+.active {
+	font-weight: 600;
+	font-size: 20px;
+  }
+  
 /* Fin de gestion de la page de login */
 
 footer {
