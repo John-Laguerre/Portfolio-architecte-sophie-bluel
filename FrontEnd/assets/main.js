@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Si .gallery existe, vous êtes sur "index.html"
     let projects = []; // Déclarez une variable pour stocker les projets
 
-    // Fonction pour créer la structure HTML d'un projet
+    // Partie 1 : Fonctions pour créer la structure HTML d'un projet
     function createProjectElement(project) {
       const figureElement = document.createElement("figure");
       const imgElement = document.createElement("img");
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return figureElement;
     }
 
-    // Fonction pour créer la galerie de projets
+    // Partie 2 : Fonction pour créer la galerie de projets
     function createGallery(projects, galleryElement) {
       // Effacez le contenu existant de la galerie
       galleryElement.innerHTML = "";
@@ -38,21 +38,21 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Effectuez une requête GET pour récupérer les données de l'API des projets
+    // Partie 3 : Requête GET pour récupérer les données des projets depuis l'API
     fetch('http://localhost:5678/api/works')
       .then(response => {
         return response.json();
       }) 
       .then((data) => {
         projects = data; // Stockez les projets dans la variable projects
-        // Affichez tous les projets par défaut
+        // Affichez tous les projets par défaut en utilisant createGallery
         createGallery(projects, galleryElement); // Utilisez galleryElement
       })
       .catch(error => {
         console.error('Une erreur s\'est produite lors de la récupération des projets :', error);
       });
 
-    // categories and filter
+    // Partie 4 : Création des boutons de filtre
     function createFilterButtons(categories, galleryElement) {
       const filterButtonsContainer = document.getElementById("filter__btn");
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Utilisez les données des catégories depuis l'API pour créer les boutons de filtre
+    // Partie 5 : Utilisation des données des catégories depuis l'API pour créer les boutons de filtre
     fetch('http://localhost:5678/api/categories')
       .then(response => {
         return response.json();
@@ -109,9 +109,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
     const errorMessage = document.getElementById("errorMessage");
 
+    // Partie 6 : Gestionnaire d'événements pour le formulaire de connexion
     loginForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
+      // Récupérez les valeurs de l'email et du mot de passe depuis les champs du formulaire
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
@@ -120,23 +122,29 @@ document.addEventListener("DOMContentLoaded", function () {
         password: password,
       };
 
-      const response = await
-      fetch("http://localhost:5678/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userCredentials),
-      });
-       if (response.status === 200) {
+      try {
+        // Effectuez une requête asynchrone vers le serveur avec les informations de connexion
+        const response = await fetch("http://localhost:5678/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userCredentials),
+        });
+
+        if (response.status === 200) {
           // Authentification réussie, stockez le token et redirigez
           // vers la page d'accueil
-        const data = await response.json();
-        window.localStorage.setItem("token", data.token);
-       } else {
-            // Authentification échouée, affichez un message d'erreur
-            errorMessage.textContent =
-              "L'authentification a échoué. Vérifiez vos informations.";
-          }
-        })
-    }})
+          const data = await response.json();
+          window.localStorage.setItem("token", data.token);
+        } else {
+          // Authentification échouée, affichez un message d'erreur
+          errorMessage.textContent =
+            "L'authentification a échoué. Vérifiez vos informations.";
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+});
