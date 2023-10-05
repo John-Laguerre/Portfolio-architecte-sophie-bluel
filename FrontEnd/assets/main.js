@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((categories) => {
         // Appelez la fonction pour créer les boutons de filtre avec les données des catégories
-        createFilterButtons(categories, galleryElement); // Utilisez galleryElement
+        createFilterButtons(categories, galleryElement);
       })
       .catch(error => {
         console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
@@ -133,7 +133,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Authentification réussie, stockez le token et redirigez
             // vers la page d'accueil
             localStorage.setItem("token", data.token);
-            window.location.href = "page_accueil.html";
+            
+            // Redirigez vers la page d'accueil
+            window.location.href = "index.html";
           } else {
             // Authentification échouée, affichez un message d'erreur
             errorMessage.textContent =
