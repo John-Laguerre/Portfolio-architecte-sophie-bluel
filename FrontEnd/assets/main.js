@@ -104,31 +104,22 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
       });
 
-    // Récupérez la fenêtre modale
-    const modal = document.getElementById("myModal");
+    // Vérifiez si l'utilisateur est connecté
+    const token = localStorage.getItem("token");
 
-    // Récupérez le bouton "Modifier" qui ouvrira la fenêtre modale
-    const openModalButton = document.getElementById("openModalButton");
+    if (token) {
+      // Si l'utilisateur est connecté, affichez le bouton de déconnexion
+      const logoutButton = document.querySelector(".logout-button");
+      logoutButton.style.display = "inline-block";
 
-    // Récupérez l'élément de fermeture de la fenêtre modale (la croix)
-    const closeButton = document.querySelector(".close");
-
-    // Gestionnaire d'événements pour ouvrir la fenêtre modale
-    openModalButton.addEventListener("click", function () {
-      modal.style.display = "block";
-    });
-
-    // Gestionnaire d'événements pour fermer la fenêtre modale en cliquant sur la croix
-    closeButton.addEventListener("click", function () {
-      modal.style.display = "none";
-    });
-
-    // Gestionnaire d'événements pour fermer la fenêtre modale en cliquant en dehors de celle-ci
-    window.addEventListener("click", function (event) {
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    });
+      // Gestionnaire d'événements pour la déconnexion
+      logoutButton.addEventListener("click", function () {
+        // Supprimez le token de l'utilisateur
+        localStorage.removeItem("token");
+        // Redirigez vers la page de connexion
+        window.location.href = 'login.html';
+      });
+    }
 
   } else {
     // Sinon, vous êtes sur "login.html"
@@ -174,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error(error);
       }
     });
+
     // Partie 7 : Mettez en évidence le lien "login" si vous êtes sur la page "login.html"
     const loginLink = document.querySelector("li#login-link");
 
@@ -187,4 +179,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
-
