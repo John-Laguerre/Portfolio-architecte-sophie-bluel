@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
     const errorMessage = document.getElementById("errorMessage");
 
-    loginForm.addEventListener("submit", function (e) {
+    loginForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const email = document.getElementById("email").value;
@@ -120,31 +120,23 @@ document.addEventListener("DOMContentLoaded", function () {
         password: password,
       };
 
+      const response = await
       fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userCredentials),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            // Authentification réussie, stockez le token et redirigez
-            // vers la page d'accueil
-            localStorage.setItem("token", data.token);
-            
-            // Redirigez vers la page d'accueil
-            window.location.href = "index.html";
-          } else {
+      });
+       if (response.status === 200) {
+          // Authentification réussie, stockez le token et redirigez
+          // vers la page d'accueil
+        const data = await response.json();
+        window.localStorage.setItem("token", data.token);
+       } else {
             // Authentification échouée, affichez un message d'erreur
             errorMessage.textContent =
               "L'authentification a échoué. Vérifiez vos informations.";
           }
         })
-        .catch((error) => {
-          console.error("Erreur de communication avec l'API : " + error);
-        });
-    });
-  }
-});
+    }})
