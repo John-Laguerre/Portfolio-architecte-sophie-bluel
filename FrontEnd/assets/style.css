@@ -100,10 +100,23 @@ nav li {
 	font-size: 16px;
 	cursor: pointer;
 }
-
-li:hover {
+/* gestion style lien et de l'élément ( li ) */
+li:hover,
+li a:visited:hover,
+li a:hover {
 	color: #B1663C;
 }
+li a {
+	text-decoration: none;
+	color: black;
+}
+
+li a:visited {
+	color: black;
+}
+
+/* fin de gestion */
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -132,7 +145,7 @@ li:hover {
 	margin-bottom: 1em;
 }
 
-/* gestion des btn catégories */
+/* gestion style des btn catégories */
 #filter__btn {
 	display: flex;
 	justify-content: center;
@@ -157,7 +170,7 @@ li:hover {
 	color: #fff;
 	background-color: #1D6154;
 }
-/* fin de gestion des btn categories */
+
 
 /* gestion des largeurs spécifiques pour les boutons */
 #filter__btn .btn:nth-child(1) {
@@ -175,7 +188,7 @@ li:hover {
 #filter__btn .btn:nth-child(4) {
 	width: 198px;
 }
-/* fin de la gestion des largeurs */
+/* f gestion des largeurs */
 .gallery {
 	width: 100%;
 	display: grid;
@@ -292,4 +305,9 @@ footer {
 }
 .info_hover:hover {
 	color: #B1663C;
+}
+
+/* Modal */
+.display-none {
+	display: none !important;
 }
