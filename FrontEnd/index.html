@@ -31,9 +31,39 @@
     </nav>
 </header>
 <main>
-    <aside id="modal-overlay" class="display-none" >
+    <aside id="modal-overlay" class="display-none">
         <div class="modal-content">
+            <i class=" close-modal-btn fa-light fa-xmark"></i>
+            <h3 class="modal-title">Galerie photo</h3>
+            <div class="modal-gallery"></div>
+            <i class="modal-arrow-btn fa-solid fa-arrow-left display-none" aria-hidden="true"></i>
+            <h4 class="modal-add-title display-none">Ajouter photo</h4>
+            <form class="display-none" id="addImgForm" method="post" name="addImgForm">
+                <div class="img-form">
+                    <div class="img-add" id="file">
+                        <i class="imgIcon fa-regular fa-image" aria-hidden="true"></i>
+                        <img src="./assets/icons/instagram.png" alt="Prévisualisation de l'image"
+                            class="preview-img display-none" id="preview">
+                        <div class="btn-add">
+                            <input type="file" name="img" required>
+                            + Ajouter photo
+                        </div>
+                        <p class="add-text">jpg, png : 4mo max</p>
+                        <p class="error"></p>
+                    </div>
+                    <label for="title">Titre</label>
+                    <input type="text" name="title" id="title" required>
+                    <label for="category">Catégorie</label>
+                    <select name="category" id="category" required>
+                        <option value="" label=" "></option>
+                    </select>
+                    <hr>
+                    <input class="modal-img-btn disabled" type="submit" value="Envoyer">
+                </div>
+            </form>
+            <hr id="hrModalGallery">
 
+            <a id="nextPage" class="modal-img-btn">Ajouter une photo</a>
         </div>
     </aside>
     <div class="mode-edi display-none">
