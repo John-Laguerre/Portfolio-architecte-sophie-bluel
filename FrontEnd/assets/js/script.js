@@ -1,4 +1,4 @@
-//script.js
+// script.js
 
 // Vérifiez si vous êtes sur la page "index.html" en vérifiant si l'élément .gallery existe
 const galleryElement = document.querySelector(".gallery");
