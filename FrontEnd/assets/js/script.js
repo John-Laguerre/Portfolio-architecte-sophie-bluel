@@ -1,4 +1,4 @@
-// script.js
+// Script.js
 
 // Vérifiez si vous êtes sur la page "index.html" en vérifiant si l'élément .gallery existe
 const galleryElement = document.querySelector(".gallery");
@@ -47,7 +47,7 @@ if (galleryElement) {
       projects = data; // Stockez les projets dans la variable projects
       // Affichez tous les projets par défaut en utilisant createGallery
       createGallery(projects, galleryElement); // Utilisez galleryElement
-    
+
       // Partie 4 : Utilisation des données des catégories depuis l'API pour créer les boutons de filtre
       fetch('http://localhost:5678/api/categories')
         .then(response => {
@@ -103,4 +103,43 @@ if (galleryElement) {
       });
     });
   }
+  const modalOverlay = document.querySelector('.modal-overlay');
+  const modalGallery = modalOverlay.querySelector('.modal-gallery');
+  // Partie Modal Gallery : Création des éléments pour la galerie modale
+  projects.forEach(project => {
+    const projectID = project.id;
+    const projectTitle = project.title;
+    const projectImageUrl = project.imageUrl;
+
+    // Pour chaque projet, créez des éléments pour la galerie modale
+    // - projectID : Identifiant unique du projet
+    // - projectTitle : Titre du projet
+    // - projectImageUrl : URL de l'image du projet
+
+    // Étape 1 : Créez un conteneur pour chaque projet dans la galerie modale
+    const modalGalleryDiv = document.createElement('div');
+    modalGalleryDiv.style.position = "relative";
+
+    // Étape 2 : Créez une image pour afficher le projet
+    const modalGalleryImg = document.createElement('img');
+    modalGalleryImg.src = projectImageUrl; // Définissez l'URL de l'image du projet
+    modalGalleryImg.alt = projectTitle; // Définissez le texte alternatif de l'image
+
+    // Étape 3 : Créez un bouton de suppression pour le projet
+    const trashButton = document.createElement('a');
+    const trashIcon = document.createElement('i');
+    trashButton.classList.add('delete-icon');
+    trashButton.dataset.projectId = projectID; // Stockez l'identifiant du projet en tant que données personnalisées
+
+    // Étape 4 : Ajoutez l'icône de suppression à l'élément du bouton
+    trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
+
+    // Étape 5 : Construisez la structure de la galerie modale en ajoutant les éléments créés
+    modalGalleryDiv.appendChild(modalGalleryImg); // Ajoutez l'image du projet
+    trashButton.appendChild(trashIcon); // Ajoutez l'icône de suppression au bouton
+    modalGalleryDiv.appendChild(trashButton); // Ajoutez le bouton à la galerie modale
+
+    // Étape 6 : Ajoutez le conteneur du projet à la galerie modale
+    modalGallery.appendChild(modalGalleryDiv); // Ajoutez le conteneur du projet à la galerie modale existante
+  });
 }
