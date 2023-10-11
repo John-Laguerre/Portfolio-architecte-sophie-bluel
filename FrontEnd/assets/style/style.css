@@ -274,7 +274,7 @@ input[type="submit"]{
 }
 
 .login__mdpoublie {
-    text-align: center;
+    display: block;
     color: #3D3D3D;
 }
 
