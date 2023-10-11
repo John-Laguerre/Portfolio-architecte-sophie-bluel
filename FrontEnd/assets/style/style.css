@@ -335,7 +335,7 @@ footer {
 	color: #000;
 }
 
-#modal-overlay {
+.modal-overlay {
 	position: fixed;
 	top: 0px;
 	left: 0px;
