@@ -25,7 +25,7 @@
             </li>
             <li>
                 <a class="login-button" href="./login.html">login</a>
-                <a class="logout-button display-none">logout</a>
+                <a class="logout-button active display-none">logout</a>
             </li>
             <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
         </ul>
@@ -40,6 +40,7 @@
             <div class="modal-gallery"></div>
             <i class="modal-arrow-btn fa-solid fa-arrow-left display-none" aria-hidden="true"></i>
             <h4 class="modal-add-title display-none">Ajouter photo</h4>
+            <!-- form -->
             <form class="display-none" id="addImgForm" method="post" name="addImgForm">
                 <div class="img-form">
                     <div class="img-add" id="file">
@@ -63,15 +64,18 @@
                     <input class="modal-img-btn disabled" type="submit" value="Envoyer">
                 </div>
             </form>
+            <!-- -->
             <hr id="hrModalGallery">
 
             <a id="nextPage" class="modal-img-btn">Ajouter une photo</a>
         </div>
     </aside>
+    <!-- mode édit -->
     <div class="mode-edit display-none">
         <i class="fa-light fa-pen-to-square" aria-hidden="true"></i>
         <p>Mode édition</p>
     </div>
+    <!-- -->
     <!-- -->
     <section id="introduction">
         <figure>
@@ -87,7 +91,7 @@
     <section id="portfolio">
         <div>
             <h2>Mes Projets</h2>
-            	<!-- Modal -->
+            	<!-- Modal modifier -->
 				<a class="edit-btn display-none">
 					<i class="fa-light fa-pen-to-square" aria-hidden="true"></i>
 					<span>modifier</span>
