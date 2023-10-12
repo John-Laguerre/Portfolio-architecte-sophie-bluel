@@ -67,7 +67,7 @@ if (galleryElement) {
 
   // Partie 5 : Création des boutons de filtre
   function createFilterButtons(categories, galleryElement, projects) {
-    const filterButtonsContainer = document.getElementById("filter__btn");
+    const filterButtonsContainer = document.getElementById("filter__button");
 
     // Créez le bouton "Tous"
     const allButton = document.createElement("button");
