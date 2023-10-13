@@ -25,16 +25,23 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   
+    // Gestionnaire d'événements pour le bouton "Mode Édition"
+    editButton.addEventListener("click", function (event) {
+      event.stopPropagation(); // Empêche la propagation de l'événement de fermeture
+      const show = [modalOverlay, modeEditOverlay];
+      showElements(show);
+    });
+  
     // Gestionnaire d'événements pour le bouton de fermeture à l'intérieur de la modal
     closeModalButton.addEventListener("click", function () {
-      const hide = [modalOverlay, modeEditOverlay];
+      const hide = [modalOverlay];
       hideElements(hide);
     });
   
     // Gestionnaire d'événements pour la zone en dehors de la modal (arrière-plan)
     modalOverlay.addEventListener("click", function (e) {
       if (e.target === modalOverlay) {
-        const hide = [modalOverlay, modeEditOverlay];
+        const hide = [modalOverlay];
         hideElements(hide);
       }
     });
@@ -52,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
       showElements(show);
     } else {
       // Si le token n'est pas présent, masquez les éléments
-      const hide = [modalOverlay, modeEditOverlay];
+      const hide = [modalOverlay];
       hideElements(hide);
     }
   });
