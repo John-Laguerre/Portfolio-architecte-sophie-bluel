@@ -1,42 +1,43 @@
 document.addEventListener("DOMContentLoaded", function () {
     const modalOverlay = document.getElementById("modal-overlay");
     const modeEditOverlay = document.querySelector(".mode-edit-overlay");
-    const editButton = document.querySelector(".edit-button");
+    const editlink = document.querySelector(".edit-link");
     const closeModalButton = modalOverlay.querySelector(".close-modal-button");
-  
+    const header = document.querySelector("header");
+    
     // Fonction pour modifier l'attribut aria-hidden
     function updateAriaHidden(elements, value) {
       elements.forEach(element => {
         element.setAttribute("aria-hidden", value);
       });
     }
-  
+    
     // Fonction pour montrer les éléments
     function showElements(elements) {
       elements.forEach(element => {
         element.classList.remove("display-none");
       });
     }
-  
+    
     // Fonction pour cacher les éléments
     function hideElements(elements) {
       elements.forEach(element => {
         element.classList.add("display-none");
       });
     }
-  
+    
     // Gestionnaire d'événements pour le bouton "Modifier"
-    editButton.addEventListener("click", function () {
+    editlink.addEventListener("click", function () {
       const show = [modalOverlay];
       showElements(show);
     });
-  
+    
     // Gestionnaire d'événements pour le bouton de fermeture à l'intérieur de la modal
     closeModalButton.addEventListener("click", function () {
       const hide = [modalOverlay];
       hideElements(hide);
     });
-  
+    
     // Gestionnaire d'événements pour la zone en dehors de la modal (arrière-plan)
     modalOverlay.addEventListener("click", function (e) {
       if (e.target === modalOverlay) {
@@ -44,20 +45,24 @@ document.addEventListener("DOMContentLoaded", function () {
         hideElements(hide);
       }
     });
-  
+    
     // Sélectionnez tous les icônes avec aria-hidden="true" et définissez-les sur "false"
     const iconsWithAriaHidden = document.querySelectorAll('[aria-hidden="true"]');
     updateAriaHidden(iconsWithAriaHidden, "false");
-  
+    
     // Vérifiez si l'utilisateur est connecté en vérifiant la présence du token
     const authToken = localStorage.getItem("token"); // Récupère le token du stockage local
-  
+    
     if (authToken) {
       // Si le token est présent, l'utilisateur est connecté, affichez le mode édition
       showElements([modeEditOverlay]);
+      // Affichez le bouton "Modifier" en supprimant la classe "display-none"
+      editlink.classList.remove("display-none");
+      // Ajoute la marge au header
+      header.style.marginTop = '109px';
     } else {
       // Si le token n'est pas présent, masquez les éléments
-      hideElements([modeEditOverlay]);
+      hideElements([modeEditOverlay, editlink]);
     }
   });
   
