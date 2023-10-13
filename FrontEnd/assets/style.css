@@ -88,6 +88,8 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
+/****** NAV ******/
 nav ul {
 	display: flex;
 	align-items: center;
@@ -115,8 +117,8 @@ li a:visited {
 	color: black;
 }
 
-/* fin de gestion */
 
+/* INTRODUCTION */
 #introduction {
 	display: flex;
 	align-items: center;
@@ -140,12 +142,17 @@ li a:visited {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+/* PORTFOLIO */
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 }
 
-/* gestion style des btn catégories */
+.portfolio-text {
+	position: relative;
+}
+
 #filter__button {
 	display: flex;
 	justify-content: center;
@@ -188,7 +195,7 @@ li a:visited {
 #filter__button .btn:nth-child(4) {
 	width: 198px;
 }
-/* f gestion des largeurs */
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -201,6 +208,7 @@ li a:visited {
 	width: 100%;
 
 }
+/* Contact */
 #contact {
 	width: 50%;
 	margin: auto;
