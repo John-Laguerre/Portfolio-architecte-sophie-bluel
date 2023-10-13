@@ -62,6 +62,14 @@ header {
 main {
 	margin: 0 150px;
 }
+
+a,
+button,
+li,
+input[type="submit"] {
+	cursor: pointer;
+}
+
 section {
 	margin: 50px 0
 }
