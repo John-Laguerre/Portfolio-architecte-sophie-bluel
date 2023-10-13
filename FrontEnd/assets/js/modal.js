@@ -25,10 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   
-    // Gestionnaire d'événements pour le bouton "Mode Édition"
-    editButton.addEventListener("click", function (event) {
-      event.stopPropagation(); // Empêche la propagation de l'événement de fermeture
-      const show = [modalOverlay, modeEditOverlay];
+    // Gestionnaire d'événements pour le bouton "Modifier"
+    editButton.addEventListener("click", function () {
+      const show = [modalOverlay];
       showElements(show);
     });
   
@@ -54,13 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const authToken = localStorage.getItem("token"); // Récupère le token du stockage local
   
     if (authToken) {
-      // Si le token est présent, l'utilisateur est connecté, affichez les éléments
-      const show = [modalOverlay, modeEditOverlay];
-      showElements(show);
+      // Si le token est présent, l'utilisateur est connecté, affichez le mode édition
+      showElements([modeEditOverlay]);
     } else {
       // Si le token n'est pas présent, masquez les éléments
-      const hide = [modalOverlay];
-      hideElements(hide);
+      hideElements([modeEditOverlay]);
     }
   });
   
