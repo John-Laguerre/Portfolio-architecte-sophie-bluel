@@ -161,47 +161,32 @@ li a:visited {
 	position: relative;
 }
 
-#filter__button {
+#filter__links {
 	display: flex;
-	justify-content: center;
-	height: 37px;
-	margin-bottom: 3em;
+	margin: 51px;
 	gap: 10px;
+	justify-content: center;
 }
 
-#filter__button .btn {
-	background: none;
-	border-radius: 60px;
-	border: 1px solid #1D6154;
-	color: #1D6154;
-	font-family: Syne;
-	font-size: 16px;
-	font-weight: 700;
-	height: 37px; 
-	cursor: pointer;
+#filter__links .filters {
+    text-align: center;
+    font-family: Syne;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+    min-width: 100px;
+    padding: 9px;
+    color: #1D6154;
+    border-radius: 60px;
+    border: 1px solid #1D6154;
+    text-decoration: none;
 }
 
-#filter__button .btn:hover {
+#filter__links .filters:hover {
 	color: #fff;
 	background-color: #1D6154;
-}
-
-
-/* gestion des largeurs spécifiques pour les boutons */
-#filter__button .btn:nth-child(1) {
-	width: 100px;
-}
-
-#filter__button .btn:nth-child(2) {
-	width: 100px; 
-}
-
-#filter__button .btn:nth-child(3) {
-	width: 157px;
-}
-
-#filter__button .btn:nth-child(4) {
-	width: 198px;
 }
 
 .gallery {
@@ -297,12 +282,6 @@ input[type="submit"]{
 .login label {
 	margin: 2em 0 1em 0;
 }
-
-
-.active {
-	font-weight: 600;
-	font-size: 20px;
-  }
   
 /* Fin de gestion de la page de login */
 
@@ -341,7 +320,7 @@ footer {
 	gap: 21px;
 }
 
-.edit-button {
+.edit-link {
 	display: flex;
 	gap: 10px;
 	position: absolute;
