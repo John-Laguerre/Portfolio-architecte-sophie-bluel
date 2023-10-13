@@ -345,7 +345,7 @@ footer {
 	display: flex;
 	gap: 10px;
 	position: absolute;
-	top: 0;
+	top: 9px;
 	left: calc(50% + 111px);
 	margin-left: 10px;
 	color: #000;
