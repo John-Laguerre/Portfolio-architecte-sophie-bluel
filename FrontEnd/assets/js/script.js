@@ -48,14 +48,14 @@ if (galleryElement) {
       // Affichez tous les projets par défaut en utilisant createGallery
       createGallery(projects, galleryElement); // Utilisez galleryElement
 
-      // Partie 4 : Utilisation des données des catégories depuis l'API pour créer les boutons de filtre
+      // Partie 4 : Utilisation des données des catégories depuis l'API pour créer les liens de filtre
       fetch('http://localhost:5678/api/categories')
         .then(response => {
           return response.json();
         })
         .then((categories) => {
           // Modification : Ajout de l'argument "projects"
-          createFilterButtons(categories, galleryElement, projects); // Ajout de "projects"
+          createFilterLiens(categories, galleryElement, projects); // Ajout de "projects"
         })
         .catch(error => {
           console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
@@ -65,38 +65,38 @@ if (galleryElement) {
       console.error('Une erreur s\'est produite lors de la récupération des projets :', error);
     });
 
-  // Partie 5 : Création des boutons de filtre
-  function createFilterButtons(categories, galleryElement, projects) {
-    const filterButtonsContainer = document.getElementById("filter__button");
+  // Partie 5 : Création des liens de filtre
+  function createFilterLiens(categories, galleryElement, projects) {
+    const filterLiensContainer = document.getElementById("filter__links");
 
-    // Créez le bouton "Tous"
-    const allButton = document.createElement("button");
-    allButton.innerText = "Tous";
-    allButton.classList.add("btn");
-    allButton.id = "all"; // L'ID doit être "all"
-    filterButtonsContainer.appendChild(allButton);
+    // Créez le lien "Tous"
+    const allLien = document.createElement("a");
+    allLien.innerText = "Tous";
+    allLien.classList.add("filters");
+    allLien.id = "all"; // L'ID doit être "all"
+    filterLiensContainer.appendChild(allLien);
 
     // Créez des boutons pour chaque catégorie en utilisant les données des catégories
     categories.forEach((category) => {
-      const filterButton = document.createElement("button");
-      filterButton.innerText = category.name;
-      filterButton.id = category.id;
-      filterButton.classList.add("btn");
-      filterButtonsContainer.appendChild(filterButton);
+      const filterLien = document.createElement("a");
+      filterLien.innerText = category.name;
+      filterLien.id = category.id;
+      filterLien.classList.add("filters");
+      filterLiensContainer.appendChild(filterLien);
     });
 
-    // Ajoutez l'écouteur d'événement au clic pour chaque bouton de filtre
-    const filterButtons = filterButtonsContainer.querySelectorAll("button");
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const buttonId = button.id;
-        if (buttonId === "all") {
+    // Ajoutez l'écouteur d'événement au clic pour chaque lien de filtre
+    const filterLiens = filterLiensContainer.querySelectorAll("a");
+    filterLiens.forEach((lien) => {
+      lien.addEventListener("click", () => {
+        const lienId = lien.id;
+        if (lienId === "all") {
           // Affichez tous les projets
           createGallery(projects, galleryElement);
         } else {
           // Filtrer les projets par catégorie
           const filteredArray = projects.filter(
-            (project) => project.categoryId.toString() === buttonId
+            (project) => project.categoryId.toString() === lienId
           );
           createGallery(filteredArray, galleryElement);
         }
