@@ -104,3 +104,24 @@ if (galleryElement) {
     });
   }
 }
+
+// Gestionnaire d'événements pour le bouton de déconnexion
+const logoutLink = document.querySelector(".logout-link");
+
+if (logoutLink) {
+  logoutLink.addEventListener("click", function () {
+    // Supprimez le token de l'utilisateur du stockage local
+    localStorage.removeItem("token");
+    // Redirigez l'utilisateur vers la page d'accueil
+    window.location.href = 'login.html';
+  });
+}
+const loginLink = document.querySelector(".login-link")
+
+if (localStorage.getItem("token")) {
+  loginLink.classList.add('display-none');
+  logoutLink.classList.remove('display-none');
+} else {
+  loginLink.classList.remove('display-none');
+  logoutLink.classList.add('display-none');
+}
