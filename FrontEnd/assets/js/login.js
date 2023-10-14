@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Récupère le lien de connexion dans la barre de navigation
-  const loginLink = document.querySelector("li#login-link");
+  const loginLink = document.querySelector(".login-link");
   // Récupère le nom de la page actuellement affichée dans l'URL
   const currentPage = window.location.pathname.split("/").pop();
 
@@ -55,15 +55,3 @@ document.addEventListener("DOMContentLoaded", function () {
     loginLink.classList.add("active");
   }
 });
-
-// Gestionnaire d'événements pour le bouton de déconnexion
-const logoutButton = document.getElementById("logoutButton");
-
-if (logoutButton) {
-  logoutButton.addEventListener("click", function () {
-    // Supprimez le token de l'utilisateur du stockage local
-    localStorage.removeItem("token");
-    // Redirigez l'utilisateur vers la page d'accueil
-    window.location.href = 'index.html';
-  });
-}
