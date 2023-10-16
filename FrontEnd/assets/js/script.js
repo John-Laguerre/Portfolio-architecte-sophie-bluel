@@ -123,7 +123,20 @@ if (galleryElement) {
       filterLien.id = category.id;
       filterLien.classList.add("filters");
       filterLiensContainer.appendChild(filterLien);
+
+      // Appel de la fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
+    createCategoryOption(category.id, category.name);
     });
+
+    
+    // Fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
+    function createCategoryOption(categoryID, categoryName) {
+      const selectUpload = document.getElementById('category');
+      const option = document.createElement('option');
+      option.value = categoryID;
+      option.textContent = categoryName;
+      selectUpload.appendChild(option);
+    } 
 
     // Ajoutez l'écouteur d'événement au clic pour chaque lien de filtre
     const filterLiens = filterLiensContainer.querySelectorAll("a");
