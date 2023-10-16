@@ -124,12 +124,11 @@ if (galleryElement) {
       filterLien.classList.add("filters");
       filterLiensContainer.appendChild(filterLien);
 
-      // Appel de la fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
-    createCategoryOption(category.id, category.name);
+      //( Moadel ) Appel de la fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
+      createCategoryOption(category.id, category.name);
     });
 
-    
-    // Fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
+    // ( Modal ) Fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
     function createCategoryOption(categoryID, categoryName) {
       const selectUpload = document.getElementById('category');
       const option = document.createElement('option');
@@ -169,13 +168,20 @@ if (logoutLink) {
     // Redirigez l'utilisateur vers la page d'accueil
     window.location.href = 'login.html';
   });
-}
-const loginLink = document.querySelector(".login-link")
 
-if (localStorage.getItem("token")) {
-  loginLink.classList.add('display-none');
-  logoutLink.classList.remove('display-none');
-} else {
-  loginLink.classList.remove('display-none');
-  logoutLink.classList.add('display-none');
+  // Sélectionnez le lien de connexion
+  const loginLink = document.querySelector(".login-link");
+
+  // Vérifiez si un token est présent dans le stockage local (utilisateur connecté)
+  if (localStorage.getItem("token")) {
+    // Masquez le lien de connexion
+    loginLink.classList.add('display-none');
+    // Affichez le lien de déconnexion
+    logoutLink.classList.remove('display-none');
+  } else {
+    // Affichez le lien de connexion
+    loginLink.classList.remove('display-none');
+    // Masquez le lien de déconnexion
+    logoutLink.classList.add('display-none');
+  }
 }
