@@ -495,7 +495,7 @@ footer {
 	margin-top: 4px;
   }
 
-.btn-add {
+.button-add {
 	width: auto !important;
 	border-radius: 50px;
 	background: #CBD6DC;
@@ -508,7 +508,7 @@ footer {
 	white-space: nowrap;
 }
 
-.btn-upload input {
+.button-add input {
 	position: absolute;
 	left: 0;
 	top: 0;
