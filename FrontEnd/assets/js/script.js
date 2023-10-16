@@ -48,7 +48,7 @@ if (galleryElement) {
       createGallery(projects, galleryElement); // Utilisez galleryElement
 
       // Ajoutez le code pour la galerie modale ici
-      const modalOverlay = document.querySelector('.modal-overlay');
+      const modalOverlay = document.getElementById('modal-overlay');
       const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
       data.forEach(project => {
