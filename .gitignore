@@ -2,7 +2,7 @@
 .DS_Store
 
 # Ignorer les fichiers de log
-.log
+*.log
 
 # Ignorer le dossier node_modules
 node_modules/
