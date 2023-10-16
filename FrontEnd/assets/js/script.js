@@ -45,24 +45,64 @@ if (galleryElement) {
     }) 
     .then((data) => {
       projects = data; // Stockez les projets dans la variable projects
-      // Affichez tous les projets par défaut en utilisant createGallery
       createGallery(projects, galleryElement); // Utilisez galleryElement
 
-      // Partie 4 : Utilisation des données des catégories depuis l'API pour créer les liens de filtre
-      fetch('http://localhost:5678/api/categories')
-        .then(response => {
-          return response.json();
-        })
-        .then((categories) => {
-          // Modification : Ajout de l'argument "projects"
-          createFilterLiens(categories, galleryElement, projects); // Ajout de "projects"
-        })
-        .catch(error => {
-          console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
+      // Ajoutez le code pour la galerie modale ici
+      const modalOverlay = document.querySelector('.modal-overlay');
+      const modalGallery = modalOverlay.querySelector('.modal-gallery');
+
+      data.forEach(project => {
+        const projectID = project.id;
+        const projectTitle = project.title;
+        const projectImageUrl = project.imageUrl;
+
+        const modalGalleryDiv = document.createElement('div');
+        const modalGalleryImg = document.createElement('img');
+        const trashButton = document.createElement('a');
+        const trashIcon = document.createElement('i');
+
+        modalGalleryDiv.style.position = "relative";
+
+        trashButton.classList.add('delete-icon');
+        trashButton.dataset.projectId = projectID;
+
+        modalGalleryImg.src = projectImageUrl;
+        modalGalleryImg.alt = projectTitle;
+
+        trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
+
+        modalGalleryDiv.appendChild(modalGalleryImg);
+        trashButton.appendChild(trashIcon);
+        modalGalleryDiv.appendChild(trashButton);
+        modalGallery.appendChild(modalGalleryDiv);
+      });
+
+      // Ajoutez les événements de clic pour les boutons de suppression
+      const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
+      deleteIcons.forEach(deleteIcon => {
+        deleteIcon.addEventListener('click', () => {
+          const projectId = deleteIcon.dataset.projectId;
+
+          // Appeler la fonction de suppression du projet (vous devez l'implémenter)
+          deleteProject(projectId);
         });
+      });
     })
     .catch(error => {
       console.error('Une erreur s\'est produite lors de la récupération des projets :', error);
+    });
+
+  // Partie 4 : Requête GET pour récupérer les données des catégories depuis l'API
+  fetch('http://localhost:5678/api/categories')
+    .then(response => {
+      return response.json();
+    })
+    .then((categories) => {
+      // Modification : Ajout de l'argument "projects"
+      createFilterLiens(categories, galleryElement, projects); // Ajout de "projects"
+    })
+    .catch(error => {
+      console.error('Une erreur s\'est produite lors de la récupération des catégories :', error);
     });
 
   // Partie 5 : Création des liens de filtre
@@ -104,6 +144,7 @@ if (galleryElement) {
     });
   }
 }
+
 
 // Gestionnaire d'événements pour le bouton de déconnexion
 const logoutLink = document.querySelector(".logout-link");
