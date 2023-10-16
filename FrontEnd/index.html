@@ -43,16 +43,16 @@
             <i class=" close-modal-button fa-solid fa-xmark fa-lg"></i>
             <h3 class="modal-gallery-title">Galerie photo</h3>
             <div class="modal-gallery"></div>
+            <!-- Form -->
             <i class="modal-arrow-button fa-solid fa-arrow-left fa-lg display-none" aria-hidden="true"></i>
-            <h4 class="modal-add-title display-none">Ajouter photo</h4>
-            <!-- form -->
+            <h3 class="modal-add-title display-none">Ajouter photo</h3>
             <form class="display-none" id="addImgForm" method="post" name="addImgForm">
                 <div class="img-form">
-                    <div class="img-upload" id="file">
+                    <div class="img-add" id="file">
                         <i class="imgIcon fa-regular fa-image" aria-hidden="true"></i>
                         <img src="./assets/icons/instagram.png" alt="Prévisualisation de l'image"
                             class="preview-img display-none" id="preview">
-                        <div class="button-upload">
+                        <div class="button-add">
                             <input type="file" name="img" required>
                             + Ajouter photo
                         </div>
@@ -66,22 +66,22 @@
                         <option value="" label=" "></option>
                     </select>
                     <hr>
-                    <input class="modal-img-button disabled" type="submit" value="Envoyer">
+                    <input class="modal-img-button disabled" type="submit" value="Valider">
                 </div>
             </form>
-            <!-- -->
+            <!-- Fin form-->
             <hr id="hrModalGallery">
 
             <a id="nextPage" class="modal-img-button">Ajouter une photo</a>
         </div>
     </aside>
-    <!-- mode édit -->
+    <!-- Fin modal -->
+    <!-- Mode édit -->
     <div class="mode-edit-overlay display-none">
         <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
         <p>Mode édition</p>
     </div>
-    <!-- -->
-    <!-- -->
+    <!-- Fin mode édit -->
     <section id="introduction">
         <figure>
             <img src="./assets/images/sophie-bluel.png" alt="">
