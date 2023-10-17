@@ -10,8 +10,8 @@
     <script src="https://kit.fontawesome.com/8f2991717e.js" crossorigin="anonymous"></script>
     <meta name="description" content="">
     <link rel="stylesheet" href="./assets/style.css">
+    <!--defer pour que le script soit lu après la page HTML-->
     <script src="assets/js/script.js" defer></script>
-   
 </head>
 <body>
 <header>
@@ -46,7 +46,7 @@
             <!-- Form -->
             <i class="modal-arrow-button fa-solid fa-arrow-left fa-lg display-none" aria-hidden="true"></i>
             <h3 class="modal-add-title display-none">Ajouter photo</h3>
-            <form class="display-none" id="addImgForm" method="post" name="addImgForm">
+            <form action="#" class="display-none" id="addImgForm" method="post" name="addImgForm">
                 <div class="img-form">
                     <div class="img-add" id="file">
                         <i class="imgIcon fa-regular fa-image" aria-hidden="true"></i>
