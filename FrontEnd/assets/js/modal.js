@@ -310,10 +310,10 @@ function previewPicture(file) {
   const imgIcon = document.querySelector('.imgIcon');
   const errorText = document.querySelector('.error');
 
-  var hide = [btnAdd, addText, imgIcon, errorText];
+  let hide = [btnAdd, addText, imgIcon, errorText];
   hideElement(hide);
 
-  var show = [previewImg];
+  let show = [previewImg];
   showElement(show);
 
   if (file.files && file.files[0]) {
