@@ -263,7 +263,15 @@ function deleteProject(projectId) {
       if (response.status === 204) {
         // Suppression réussie
         console.log('Projet supprimé avec succès');
-        // Vous pouvez actualiser la page ou prendre d'autres mesures ici
+
+        // Sélectionnez l'élément du DOM correspondant au projet à supprimer
+        const projectElement = document.querySelector(`[data-project-id="${projectId}"]`);
+
+        // Vérifiez si l'élément existe avant de le supprimer
+        if (projectElement) {
+          // Supprimez l'élément du DOM
+          projectElement.remove();
+        }
       } else {
         // Gérez l'erreur en conséquence
         console.error('Impossible de supprimer le projet.');
@@ -273,6 +281,7 @@ function deleteProject(projectId) {
       console.error('Une erreur s\'est produite lors de la suppression du projet :', error);
     });
 }
+
 
 
 // Hide Element
