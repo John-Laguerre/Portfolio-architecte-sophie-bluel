@@ -83,7 +83,7 @@ if (galleryElement) {
         deleteIcon.addEventListener('click', () => {
           const projectId = deleteIcon.dataset.projectId;
 
-          // Appeler la fonction de suppression du projet (vous devez l'implémenter)
+          // Appeler la fonction de suppression du projet
           deleteProject(projectId);
         });
       });
@@ -109,24 +109,30 @@ if (galleryElement) {
   function createFilterLiens(categories, galleryElement, projects) {
     const filterLiensContainer = document.getElementById("filter__links");
 
-    // Créez le lien "Tous"
-    const allLien = document.createElement("a");
-    allLien.innerText = "Tous";
-    allLien.classList.add("filters");
-    allLien.id = "all"; // L'ID doit être "all"
-    filterLiensContainer.appendChild(allLien);
+    if (localStorage.getItem("token")) {
+      // L'utilisateur est connecté, masquez complètement les filtres
+      filterLiensContainer.style.display = "none";
+    } else {
+      // Créez le lien "Tous"
+      const allLien = document.createElement("a");
+      allLien.innerText = "Tous";
+      allLien.classList.add("filters");
+      allLien.id = "all"; // L'ID doit être "all"
+      filterLiensContainer.appendChild(allLien);
 
-    // Créez des boutons pour chaque catégorie en utilisant les données des catégories
-    categories.forEach((category) => {
-      const filterLien = document.createElement("a");
-      filterLien.innerText = category.name;
-      filterLien.id = category.id;
-      filterLien.classList.add("filters");
-      filterLiensContainer.appendChild(filterLien);
+      // Créez des boutons pour chaque catégorie en utilisant les données des catégories
+      categories.forEach((category) => {
+        const filterLien = document.createElement("a");
+        filterLien.innerText = category.name;
+        filterLien.id = category.id;
+        filterLien.classList.add("filters");
+        filterLiensContainer.appendChild(filterLien);
 
-      //( Moadel ) Appel de la fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
-      createCategoryOption(category.id, category.name);
-    });
+        //( Moadel ) Appel de la fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
+        createCategoryOption(category.id, category.name);
+      });
+    }
+
 
     // ( Modal ) Fonction pour créer une option de catégorie et l'ajouter à la liste déroulante
     function createCategoryOption(categoryID, categoryName) {
@@ -157,7 +163,6 @@ if (galleryElement) {
   }
 }
 
-
 // Gestionnaire d'événements pour le bouton de déconnexion
 const logoutLink = document.querySelector(".logout-link");
 
@@ -174,14 +179,10 @@ if (logoutLink) {
 
   // Vérifiez si un token est présent dans le stockage local (utilisateur connecté)
   if (localStorage.getItem("token")) {
-    // Masquez le lien de connexion
-    loginLink.classList.add('display-none');
-    // Affichez le lien de déconnexion
-    logoutLink.classList.remove('display-none');
+    // Cachez le lien de connexion
+    loginLink.style.display = "none";
   } else {
-    // Affichez le lien de connexion
-    loginLink.classList.remove('display-none');
-    // Masquez le lien de déconnexion
-    logoutLink.classList.add('display-none');
+    // Cachez le lien de déconnexion
+    logoutLink.style.display = "none";
   }
 }
