@@ -113,3 +113,26 @@ function filterProjectsByCategory(categoryId) {
     });
   }
 }
+// Gestionnaire d'événements pour le bouton de déconnexion
+const logoutLink = document.querySelector(".logout-link");
+
+if (logoutLink) {
+  logoutLink.addEventListener("click", function () {
+    // Supprimez le token de l'utilisateur du stockage local
+    localStorage.removeItem("token");
+    // Redirigez l'utilisateur vers la page d'accueil
+    window.location.href = 'login.html';
+  });
+
+  // Sélectionnez le lien de connexion
+  const loginLink = document.querySelector(".login-link");
+
+  // Vérifiez si un token est présent dans le stockage local (utilisateur connecté)
+  if (localStorage.getItem("token")) {
+    // Cachez le lien de connexion
+    loginLink.style.display = "none";
+  } else {
+    // Cachez le lien de déconnexion
+    logoutLink.style.display = "none";
+  }
+}
