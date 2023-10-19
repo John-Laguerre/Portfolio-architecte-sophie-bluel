@@ -52,7 +52,7 @@ affichageImage();
 async function afficherFilter() {
   try {
     const categories = await appelApiCategorie();
-    const filterLiensContainer = document.getElementById("filter__links");
+    const filterLiensContainer = document.getElementById('filter__links');
 
     // Créez le lien "Tous"
     const allLien = document.createElement("a");
@@ -113,26 +113,73 @@ function filterProjectsByCategory(categoryId) {
     });
   }
 }
-// Gestionnaire d'événements pour le bouton de déconnexion
-const logoutLink = document.querySelector(".logout-link");
 
-if (logoutLink) {
-  logoutLink.addEventListener("click", function () {
+// mode édition
+
+// Sélection des éléments de l'interface utilisateur pour le mode édition
+const elements = {
+  header: document.querySelector('header'),
+  loginLink: document.querySelector(".login-link"),
+  logoutLink: document.querySelector(".logout-link"),
+  modeEditOverlay: document.querySelector('.mode-edit-overlay'),
+  editlink: document.querySelector('.edit-link'),
+  filterLinksContainer: document.getElementById('filter__links'),
+};
+
+// Fonction pour modifier l'attribut aria-hidden des éléments
+function updateAriaHidden(elements, value) {
+  elements.forEach(element => {
+    if (element) {
+      element.setAttribute("aria-hidden", value);
+    }
+  });
+}
+
+// Fonction pour afficher les éléments
+function showElements(elements) {
+  elements.forEach(element => {
+    if (element && element.classList) {
+      element.classList.remove("display-none");
+    }
+  });
+}
+
+// Fonction pour masquer les éléments
+function hideElements(elements) {
+  elements.forEach(element => {
+    if (element && element.classList) {
+      element.classList.add("display-none");
+    }
+  });
+}
+
+// Gestionnaire d'événements pour le bouton de déconnexion
+if (elements.logoutLink) {
+  elements.logoutLink.addEventListener("click", function () {
     // Supprimez le token de l'utilisateur du stockage local
     localStorage.removeItem("token");
     // Redirigez l'utilisateur vers la page d'accueil
     window.location.href = 'login.html';
   });
 
-  // Sélectionnez le lien de connexion
-  const loginLink = document.querySelector(".login-link");
-
   // Vérifiez si un token est présent dans le stockage local (utilisateur connecté)
   if (localStorage.getItem("token")) {
-    // Cachez le lien de connexion
-    loginLink.style.display = "none";
+    // L'utilisateur est connecté, affichez le mode édition
+    showElements([elements.modeEditOverlay]);
+    elements.editlink.classList.remove("display-none");
+    elements.loginLink.style.display = "none"; // Masquez le lien de connexion
+    elements.logoutLink.style.display = "block"; // Affichez le lien de déconnexion
+    elements.header.style.marginTop = '109px'; // Ajoutez une marge au header
+
+    // Sélectionnez tous les icônes avec aria-hidden="true" et définissez-les sur "false"
+    const iconsWithAriaHidden = document.querySelectorAll('[aria-hidden="true"]');
+    updateAriaHidden(iconsWithAriaHidden, "false");
+
+    // L'utilisateur est connecté, masquez complètement les filtres
+    elements.filterLinksContainer.style.display = "none";
   } else {
-    // Cachez le lien de déconnexion
-    logoutLink.style.display = "none";
+    // L'utilisateur n'est pas connecté
+    elements.loginLink.style.display = "block"; // Affichez le lien de connexion
+    elements.logoutLink.style.display = "none"; // Masquez le lien de déconnexion
   }
 }
