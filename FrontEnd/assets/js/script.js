@@ -124,6 +124,8 @@ const elements = {
   modeEditOverlay: document.querySelector('.mode-edit-overlay'),
   editlink: document.querySelector('.edit-link'),
   filterLinksContainer: document.getElementById('filter__links'),
+  modalOverlay: document.getElementById('modal-overlay'),
+  closeModalButton: document.querySelector('.close-modal-button'), // Nouvelle variable pour le bouton de fermeture de la modale
 };
 
 // Fonction pour modifier l'attribut aria-hidden des éléments
@@ -182,4 +184,21 @@ if (elements.logoutLink) {
     elements.loginLink.style.display = "block"; // Affichez le lien de connexion
     elements.logoutLink.style.display = "none"; // Masquez le lien de déconnexion
   }
+
+  // Gestionnaire d'événements pour ouvrir la modale au clic sur le bouton "Modifier"
+  elements.editlink.addEventListener("click", function () {
+    showElements([elements.modalOverlay]);
+  });
+
+  // Gestionnaire d'événements pour fermer la modale au clic sur le bouton de fermeture
+  elements.closeModalButton.addEventListener("click", function () {
+    hideElements([elements.modalOverlay]);
+  });
+
+  // Gestionnaire d'événements pour fermer la modale au clic en dehors de la modale
+  elements.modalOverlay.addEventListener("click", function (e) {
+    if (e.target === elements.modalOverlay) {
+      hideElements([elements.modalOverlay]);
+    }
+  });
 }
