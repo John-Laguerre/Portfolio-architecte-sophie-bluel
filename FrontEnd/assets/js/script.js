@@ -32,11 +32,11 @@ async function affichageImage() {
     works = await appelApiWorks();
     gallery.innerHTML = ""; // Efface la galerie avant d'ajouter de nouvelles images
 
-    works.forEach((projects) => {
+    works.forEach((works) => {
       const allWorks = document.createElement("figure");
       allWorks.innerHTML = `
-        <img src="${projects.imageUrl}" alt="${projects.title}">
-        <figcaption>${projects.title}</figcaption>
+        <img src="${works.imageUrl}" alt="${works.title}">
+        <figcaption>${works.title}</figcaption>
       `;
       gallery.appendChild(allWorks);
     });
@@ -47,6 +47,63 @@ async function affichageImage() {
 
 // Appeler la fonction pour afficher les images
 affichageImage();
+
+// Partie 3 : Requête GET pour récupérer les données des projets depuis l'API
+fetch('http://localhost:5678/api/works')
+  .then(response => {
+    return response.json();
+  }) 
+  .then((data) => {
+    // Remplacez la variable 'projects' par 'data' pour stocker les projets
+    const works = data;
+
+    // Appeler la fonction pour afficher les images
+    affichageImage(works);
+
+    // code pour la galerie modale
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalGallery = modalOverlay.querySelector('.modal-gallery');
+
+    works.forEach(project => {
+      const projectID = project.id;
+      const projectTitle = project.title;
+      const projectImageUrl = project.imageUrl;
+
+      const modalGalleryDiv = document.createElement('div');
+      const modalGalleryImg = document.createElement('img');
+      const trashButton = document.createElement('a');
+      const trashIcon = document.createElement('i');
+
+      modalGalleryDiv.style.position = "relative";
+
+      trashButton.classList.add('delete-icon');
+      trashButton.dataset.projectId = projectID;
+
+      modalGalleryImg.src = projectImageUrl;
+      modalGalleryImg.alt = projectTitle;
+
+      trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
+
+      modalGalleryDiv.appendChild(modalGalleryImg);
+      trashButton.appendChild(trashIcon);
+      modalGalleryDiv.appendChild(trashButton);
+      modalGallery.appendChild(modalGalleryDiv);
+    });
+
+    // Ajoutez les événements de clic pour les boutons de suppression
+    const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
+    deleteIcons.forEach(deleteIcon => {
+      deleteIcon.addEventListener('click', () => {
+        const projectId = deleteIcon.dataset.projectId;
+
+        // Appeler la fonction de suppression du projet
+        deleteProject(projectId);
+      });
+    });
+  })
+  .catch(error => {
+    console.error('Une erreur s\'est produite lors de la récupération des projets :', error);
+  });
 
 // Création des boutons filtres
 async function afficherFilter() {
@@ -84,6 +141,7 @@ async function afficherFilter() {
 
 // Appeler la fonction pour afficher les filtres
 afficherFilter();
+
 
 // Fonction pour filtrer les projets en fonction de la catégorie sélectionnée
 function filterProjectsByCategory(categoryId) {
