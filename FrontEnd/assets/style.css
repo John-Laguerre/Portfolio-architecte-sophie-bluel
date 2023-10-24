@@ -49,6 +49,7 @@ table {
 /** end reset css**/
 body {
 	max-width: 1440px;
+	margin: auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 	background: #FFFEF8;
