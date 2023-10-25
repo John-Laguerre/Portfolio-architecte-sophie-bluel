@@ -198,6 +198,11 @@ li a:visited {
 	background-color: #1D6154;
 }
 
+#filter__links .active {
+    background-color: #1D6154;
+    color: #fff;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
