@@ -6,13 +6,13 @@ const urlDataWorks = "http://localhost:5678/api/works";
 const urlDataCategorie = "http://localhost:5678/api/categories";
 const urlDataDeleteWork = "http://localhost:5678/api/works/";
 
-// Fonction récupérant l'API works
+// Fonction pour récupérer l'API works
 async function appelApiWorks() {
   const response = await fetch(urlDataWorks);
   return await response.json();
 }
 
-// Fonction récupérant l'API catégories
+// Fonction pour récupérer l'API catégories
 async function appelApiCategorie() {
   const response = await fetch(urlDataCategorie);
   return await response.json();
@@ -20,6 +20,7 @@ async function appelApiCategorie() {
 
 let works = [];
 
+// Fonction pour créer un élément figure pour afficher une image
 function createFigureElement(imageUrl, title) {
   const figure = document.createElement('figure');
   figure.innerHTML =`<img src="${imageUrl}" alt="${title}">
@@ -119,7 +120,6 @@ function filterProjectsByCategory(categoryId) {
 // Appeler la fonction pour afficher les filtres et les images
 afficherFilter();
 affichageImage();
-
 
 // mode édition
 
@@ -239,7 +239,7 @@ fetch('http://localhost:5678/api/works')
     // Appeler la fonction pour afficher les images
     affichageImage(works);
 
-    // code pour la galerie modale
+    // Code pour la galerie modale
     const modalOverlay = document.getElementById('modal-overlay');
     const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
@@ -271,7 +271,7 @@ fetch('http://localhost:5678/api/works')
       modalGalleryDiv.appendChild(trashButton);
       modalGallery.appendChild(modalGalleryDiv);
 
-      // Ajouter le bouton de suppression au tableau
+      // Ajoutez le bouton de suppression au tableau
       trashButtons.push(trashButton);
 
       trashButton.addEventListener('click', async () => {
@@ -296,7 +296,6 @@ fetch('http://localhost:5678/api/works')
 
             // Mettez à jour la galerie principale en rechargeant les projets depuis l'API
             await affichageImage();
-            
           } catch (error) {
             console.error("Une erreur s'est produite lors de la suppression du projet :", error);
           }
@@ -307,6 +306,7 @@ fetch('http://localhost:5678/api/works')
   .catch(error => {
     console.error("Une erreur s'est produite lors de la récupération des projets :", error);
   });
+
 /*
 // Gestionnaire d'événements pour la sélection de fichier
 fileInput.addEventListener('change', function () {
