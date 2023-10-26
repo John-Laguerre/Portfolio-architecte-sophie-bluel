@@ -31,6 +31,10 @@ function createFigureElement(imageUrl, title) {
 async function affichageImage() {
   try {
     works = await appelApiWorks();
+
+    // Effacez le contenu de la galerie
+    gallery.innerHTML = "";
+
     works.forEach((work) => {
       const workFigure = createFigureElement(work.imageUrl, work.title);
       gallery.appendChild(workFigure);
@@ -114,7 +118,7 @@ function filterProjectsByCategory(categoryId) {
 
 // Appeler la fonction pour afficher les filtres et les images
 afficherFilter();
-affichageImage(works);
+affichageImage();
 
 
 // mode édition
@@ -208,7 +212,7 @@ if (logoutLink) {
     }
   });
 }
-/*
+
 // modal
 
 // Sélection des éléments pour la navigation et la gestion du modal de galerie
@@ -223,8 +227,6 @@ const submitButton = document.querySelector('.modal-img-button');
 const fileInputDiv = document.querySelector('.img-add');
 const modalGallery = document.querySelector('.modal-gallery');
 
-// affichage des works modal galerie photo
-
 // Requête GET pour récupérer les données des projets depuis l'API
 fetch('http://localhost:5678/api/works')
   .then(response => {
@@ -232,7 +234,7 @@ fetch('http://localhost:5678/api/works')
   })
   .then((data) => {
     // Remplacez la variable 'projects' par 'data' pour stocker les projets
-    const works = data;
+    works = data;
 
     // Appeler la fonction pour afficher les images
     affichageImage(works);
@@ -241,7 +243,8 @@ fetch('http://localhost:5678/api/works')
     const modalOverlay = document.getElementById('modal-overlay');
     const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
-    const trashButtons = []; // Déclarer un tableau pour stocker les boutons de suppression
+    // Créez un tableau pour stocker les boutons de suppression
+    const trashButtons = [];
 
     works.forEach(project => {
       const projectID = project.id;
@@ -270,12 +273,40 @@ fetch('http://localhost:5678/api/works')
 
       // Ajouter le bouton de suppression au tableau
       trashButtons.push(trashButton);
+
+      trashButton.addEventListener('click', async () => {
+        
+        if(confirm("voulez vous vraiment supprimer le projet ?")){
+      
+          try {
+            const authToken = localStorage.getItem("token"); // Récupérez le token depuis le stockage local
+            const response = await fetch(`http://localhost:5678/api/works/${projectID}`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${authToken}` // Utilisez le token d'authentification
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`Erreur lors de la suppression : ${response.status}`);
+            }
+
+            // Supprimez l'élément du DOM (le projet) après suppression réussie
+            modalGalleryDiv.remove();
+
+            // Mettez à jour la galerie principale en rechargeant les projets depuis l'API
+            await affichageImage();
+            
+          } catch (error) {
+            console.error("Une erreur s'est produite lors de la suppression du projet :", error);
+          }
+        }
+      });
     });
   })
   .catch(error => {
     console.error("Une erreur s'est produite lors de la récupération des projets :", error);
   });
-*/
 /*
 // Gestionnaire d'événements pour la sélection de fichier
 fileInput.addEventListener('change', function () {
@@ -379,36 +410,6 @@ categories.forEach((category) => {
   categorySelect.appendChild(option);
 });
 
-// Fonction pour supprimer un projet via l'API et mettre à jour le DOM
-async function deleteProject(projectId) {
-  try {
-    const authToken = localStorage.getItem("token"); // Récupérez le token depuis le stockage local
-    const response = await fetch(`http://localhost:5678/api/works/${projectId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authToken}` // Utilisez le token d'authentification
-      },
-    });
-
-    if (response.ok) {
-      // Suppression réussie, mettez à jour le DOM dans la page principale
-      const projectToRemove = document.querySelector(`[data-project-id="${projectId}"]`);
-      if (projectToRemove) {
-        projectToRemove.remove(); // Supprimez l'élément du DOM dans la page principale
-      }
-
-      // Mettez à jour le DOM dans la modale s'il est ouvert
-      const modalProjectToRemove = document.querySelector(`.modal-gallery [data-project-id="${projectId}"]`);
-      if (modalProjectToRemove) {
-        modalProjectToRemove.remove(); // Supprimez l'élément du DOM dans la modale
-      }
-    } else {
-      console.error("Échec de la suppression du projet.");
-    }
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de la suppression du projet :", error);
-  }
-}
 
 
 // Preview Picture
