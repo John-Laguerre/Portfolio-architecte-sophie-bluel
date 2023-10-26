@@ -2,19 +2,19 @@
 const gallery = document.querySelector('.gallery');
 
 // URLs des API
-const urlWorks = "http://localhost:5678/api/works";
-const urlCategorie = "http://localhost:5678/api/categories";
-const urlDeleteWork = "http://localhost:5678/api/works/";
+const urlDataWorks = "http://localhost:5678/api/works";
+const urlDataCategorie = "http://localhost:5678/api/categories";
+const urlDataDeleteWork = "http://localhost:5678/api/works/";
 
 // Fonction récupérant l'API works
 async function appelApiWorks() {
-  const response = await fetch(urlWorks);
+  const response = await fetch(urlDataWorks);
   return await response.json();
 }
 
 // Fonction récupérant l'API catégories
 async function appelApiCategorie() {
-  const response = await fetch(urlCategorie);
+  const response = await fetch(urlDataCategorie);
   return await response.json();
 }
 
