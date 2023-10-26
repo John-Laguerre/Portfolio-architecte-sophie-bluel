@@ -20,17 +20,20 @@ async function appelApiCategorie() {
 
 let works = [];
 
+function createFigureElement(imageUrl, title) {
+  const figure = document.createElement('figure');
+  figure.innerHTML =`<img src="${imageUrl}" alt="${title}">
+  <figcaption>${title}</figcaption>`;
+  return figure;
+}
+
 // Affichage des images
 async function affichageImage() {
   try {
     works = await appelApiWorks();
     works.forEach((work) => {
-      let projectFigure = document.createElement("figure");
-      projectFigure.innerHTML = `
-        <img src="${work.imageUrl}" alt="${work.title}">
-        <figcaption>${work.title}</figcaption>
-      `;
-      gallery.appendChild(projectFigure);
+      const workFigure = createFigureElement(work.imageUrl, work.title);
+      gallery.appendChild(workFigure);
     });
   } catch (error) {
     console.error("Une erreur s'est produite lors de la récupération des images :", error);
@@ -95,22 +98,14 @@ function filterProjectsByCategory(categoryId) {
   if (categoryId === "all") {
     // Affichez tous les projets
     works.forEach((project) => {
-      const projectFigure = document.createElement("figure");
-      projectFigure.innerHTML = `
-        <img src="${project.imageUrl}" alt="${project.title}">
-        <figcaption>${project.title}</figcaption>
-      `;
+      const projectFigure = createFigureElement(project.imageUrl, project.title);
       gallery.appendChild(projectFigure);
     });
   } else {
     // Filtrer les projets par catégorie
     works.forEach((project) => {
       if (project.categoryId.toString() === categoryId) {
-        const projectFigure = document.createElement("figure");
-        projectFigure.innerHTML = `
-          <img src="${project.imageUrl}" alt="${project.title}">
-          <figcaption>${project.title}</figcaption>
-        `;
+        const projectFigure = createFigureElement(project.imageUrl, project.title);
         gallery.appendChild(projectFigure);
       }
     });
