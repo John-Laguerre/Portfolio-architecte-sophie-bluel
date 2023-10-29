@@ -384,8 +384,9 @@ footer {
 }
 
 .modal-img-button {
-	width: 139px;
+	width: 237px;
 	margin: 2em auto 10px auto;
+	border: transparent;
 }
 
 .close-modal-button {
