@@ -290,7 +290,6 @@ fetch('http://localhost:5678/api/works')
         if(confirm("voulez vous vraiment supprimer le projet ?")){
       
           try {
-            const Token = localStorage.getItem("token"); // Récupérez le token depuis le stockage local
             const response = await fetch(`http://localhost:5678/api/works/${projectID}`, {
               method: 'DELETE',
               headers: {
