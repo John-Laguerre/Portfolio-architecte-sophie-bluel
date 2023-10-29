@@ -136,6 +136,11 @@ const portfoliotext = document.querySelector('.portfolio-text');
 const modalGalleryTitle = document.querySelector('.modal-gallery-title');
 const modalArrowButton = document.querySelector('.modal-arrow-button');
 const modalAddTitle = document.querySelector('.modal-add-title');
+const nextPage = document.getElementById('nextPage');
+const hrModalGallery = document.getElementById('hrModalGallery');
+const modalGallery = document.querySelector('.modal-gallery');
+const addImgForm = document.getElementById('addImgForm');
+const Token = localStorage.getItem("token");
 
 // Fonction pour modifier l'attribut aria-hidden des éléments
 function updateAriaHidden(elements, value) {
@@ -211,21 +216,27 @@ if (logoutLink) {
       hideElements([modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton]);
     }
   });
+
+  nextPage.addEventListener('click', function () {
+    const hide = [modalGalleryTitle, modalGallery, hrModalGallery, nextPage];
+    hideElements(hide);
+
+    const show = [modalAddTitle, addImgForm, modalArrowButton];
+    showElements(show);
+  });
+
+  modalArrowButton.addEventListener('click', function () {
+    const show = [modalGalleryTitle, modalGallery, hrModalGallery, nextPage];
+    showElements(show);
+
+    const hide = [modalAddTitle, addImgForm, modalArrowButton];
+    hideElements(hide);
+  });
 }
 
 // modal
 
-// Sélection des éléments pour la navigation et la gestion du modal de galerie
-const nextPage = document.getElementById('nextPage');
-const hrModalGallery = document.getElementById('hrModalGallery');
-const addImgForm = document.getElementById('addImgForm');
-const fileInput = document.querySelector('.img-add input[type="file"]');
-const titleInput = document.getElementById('title');
-const categorySelect = document.getElementById('category');
-const token = localStorage.getItem("token");
-const submitButton = document.querySelector('.modal-img-button');
-const fileInputDiv = document.querySelector('.img-add');
-const modalGallery = document.querySelector('.modal-gallery');
+// Affichage des works dans la galerie photo ( modal )
 
 // Requête GET pour récupérer les données des projets depuis l'API
 fetch('http://localhost:5678/api/works')
@@ -279,11 +290,11 @@ fetch('http://localhost:5678/api/works')
         if(confirm("voulez vous vraiment supprimer le projet ?")){
       
           try {
-            const authToken = localStorage.getItem("token"); // Récupérez le token depuis le stockage local
+            Token = localStorage.getItem("token"); // Récupérez le token depuis le stockage local
             const response = await fetch(`http://localhost:5678/api/works/${projectID}`, {
               method: 'DELETE',
               headers: {
-                'Authorization': `Bearer ${authToken}` // Utilisez le token d'authentification
+                'Authorization': `Bearer ${Token}` // Utilisez le token d'authentification
               },
             });
 
@@ -307,153 +318,46 @@ fetch('http://localhost:5678/api/works')
     console.error("Une erreur s'est produite lors de la récupération des projets :", error);
   });
 
-/*
-// Gestionnaire d'événements pour la sélection de fichier
-fileInput.addEventListener('change', function () {
-  previewPicture(this); // "this" fait référence à l'élément input de type fichier
-});
-
-// Vérifiez si l'utilisateur est connecté en vérifiant la présence du token
-const authToken = localStorage.getItem("token");
-// Vérifier si l'utilisateur est connecté (utilisation de token)
-if (authToken) {
-  nextPage.addEventListener('click', function () {
-    const hide = [modalGalleryTitle, modalGallery, hrModalGallery, nextPage];
-    hideElements(hide);
-
-    const show = [modalAddTitle, addImgForm, modalArrowButton];
-    showElements(show);
-  });
-
-  modalArrowButton.addEventListener('click', function () {
-    const show = [modalGalleryTitle, modalGallery, hrModalGallery, nextPage];
-    showElements(show);
-
-    const hide = [modalAddTitle, addImgForm, modalArrowButton];
-    hideElements(hide);
-  });
-}
-
-// Fonction de validation du formulaire
-function validateForm() {
-  let valid = true;
-
-  // Valider le champ de titre
-  if (titleInput.value.trim() === '') {
-    showValidationError(titleInput, true, "Le champ du titre est requis.");
-    valid = false;
-  } else {
-    hideValidationError(titleInput);
-  }
-
-  // Valider le champ de catégorie
-  if (categorySelect.value === '') {
-    showValidationError(categorySelect, true, "Veuillez sélectionner une catégorie.");
-    valid = false;
-  } else {
-    hideValidationError(categorySelect);
-  }
-
-  // Valider le champ de fichier (image)
-  if (!fileInput.files[0]) {
-    showValidationError(fileInputDiv, true, "Veuillez sélectionner une image.");
-    valid = false;
-  } else {
-    const allowedTypes = ['image/jpeg', 'image/png'];
-    if (!allowedTypes.includes(fileInput.files[0].type)) {
-      showValidationError(fileInputDiv, true, "Format de fichier non pris en charge.");
-      valid = false;
-    } else {
-      hideValidationError(fileInputDiv);
-    }
-  }
-
-  return valid;
-}
-
-// Fonction pour afficher un message d'erreur
-function showValidationError(element, show = true, errorMessage = "Ce champ est requis.") {
-  const errorText = element.nextElementSibling;
-  errorText.textContent = errorMessage;
-  if (show) {
-    errorText.classList.remove("display-none");
-    element.classList.add("error");
-  } else {
-    errorText.classList.add("display-none");
-    element.classList.remove("error");
-  }
-}
-
-// Fonction pour masquer le message d'erreur
-function hideValidationError(element) {
-  showValidationError(element, false);
-}
-
-// Ajouter un gestionnaire d'événements pour le formulaire
-addImgForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (validateForm()) {
-    // Appel de la fonction pour envoyer le formulaire
-    submitForm(new FormData(addImgForm));
-  }
-});
-
-
-// Créez un tableau d'options de catégorie que vous souhaitez ajouter
-const categories = ['Ojets', 'Appartements', 'Hôtels et restaurants'];
-
-// Parcourez le tableau de catégories et ajoutez-les au <select>
-categories.forEach((category) => {
-  const option = document.createElement('option');
-  option.value = category; // La valeur que vous souhaitez associée à chaque catégorie
-  option.text = category; // Le texte affiché pour chaque catégorie
-  categorySelect.appendChild(option);
-});
-
-
+// Sélection des éléments pour la navigation et la gestion du modal de galerie
+const titleInput = document.getElementById('title');
+const categorySelect = document.getElementById('category');
+const submitButton = document.querySelector('.modal-img-button');
+const fileInputDiv = document.querySelector('.img-add');
+const addText = document.querySelector('.add-text');
+const imgIcon = document.querySelector('.imgIcon');
+const errorText = document.querySelector('.error');
+const fileInput = document.querySelector('.img-add input[type="file"]');
+const buttonAdd = document.querySelector('.button-add');
+const previewImg = document.getElementById('preview');
 
 // Preview Picture
-function previewPicture(file) {
-  const previewImg = document.getElementById('preview');
-  const buttonAdd = document.querySelector('.button-add');
-  const addText = document.querySelector('.add-text');
-  const imgIcon = document.querySelector('.imgIcon');
-  const errorText = document.querySelector('.error');
+function previewPicture() {
+  const elementsToHide = [buttonAdd, addText, imgIcon, errorText];
+  const elementsToShow = [previewImg];
 
-  const hide = [buttonAdd, addText, imgIcon, errorText];
-  hideElements(hide);
+  hideElements(elementsToHide);
+  showElements(elementsToShow);
 
-  const show = [previewImg];
-  showElements(show);
-
-  const picture = file.files[0];
-
-  const preview = document.getElementById('preview');
-  preview.src = URL.createObjectURL(picture);
+  const picture = fileInput.files[0];
+  previewImg.src = URL.createObjectURL(picture);
 }
 
 // Remove Preview
 function removePreviewPicture() {
-  const previewImg = document.getElementById('preview');
-  const buttonAdd = document.querySelector('.button-add');
-  const addText = document.querySelector('.add-text');
-  const imgIcon = document.querySelector('.imgIcon');
-  const errorText = document.querySelector('.error');
+  const elementsToHide = [previewImg];
+  const elementsToShow = [buttonAdd, addText, imgIcon, errorText];
 
-  const show = [buttonAdd, addText, imgIcon, errorText];
-  showElements(show);
-
-  const hide = [previewImg];
-  hideElements(hide);
+  showElements(elementsToShow);
+  hideElements(elementsToHide);
 
   errorText.textContent = "";
 
-  const preview = document.getElementById('preview');
-  preview.src = "";
+  previewImg.src = "";
 }
+
 // Reset Form
 function resetForm() {
-  document.getElementById('addImgForm').reset();
+  addImgForm.reset();
   removePreviewPicture();
   hideValidationError(titleInput);
   hideValidationError(categorySelect);
@@ -461,74 +365,66 @@ function resetForm() {
   disableSubmit();
 }
 
-async function submitForm(formData) {
-  try {
-    const response = await fetch(urlWorks, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem("token")}`
-      },
-      body: formData,
-    });
+// Gestionnaire d'événements pour le changement de fichier
+fileInput.addEventListener('change', () => {
+  previewPicture();
+});
 
-    if (response.ok) {
-      // Envoi réussi, obtenez les données du nouveau projet depuis la réponse de l'API
-      const nouveauProjet = await response.json();
-      
-      // Ajoutez le nouveau projet à la galerie
-      ajouterNouveauProjetALaGalerie(nouveauProjet);
-    } else {
-      console.error("Échec de l'envoi du formulaire.");
-    }
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de l'envoi du formulaire :", error);
-  }
-}
+// Gestionnaire d'événements pour supprimer la prévisualisation
+previewImg.addEventListener('click', () => {
+  removePreviewPicture();
+});
 
-
-// Fonction pour ajouter dynamiquement un nouveau projet à la galerie
-function ajouterNouveauProjetALaGalerie(nouveauProjet) {
-  const projectFigure = document.createElement("figure");
-  projectFigure.innerHTML = `
-    <img src="${nouveauProjet.imageUrl}" alt="${nouveauProjet.title}">
-    <figcaption>${nouveauProjet.title}</figcaption>
-  `;
-  gallery.appendChild(projectFigure);
-}
-
-// Fonction pour soumettre le formulaire et ajouter un nouveau projet
-async function soumettreFormulaireEtAjouterProjet(formData) {
-  try {
-    const response = await fetch(urlWorks, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem("token")}`
-      },
-      body: formData,
-    });
-
-    if (response.ok) {
-      // Envoi réussi, obtenez les données du nouveau projet depuis la réponse de l'API
-      const nouveauProjet = await response.json();
-      
-      // Ajoutez le nouveau projet à la galerie
-      ajouterNouveauProjetALaGalerie(nouveauProjet);
-    } else {
-      console.error("Échec de l'envoi du formulaire.");
-    }
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de l'envoi du formulaire :", error);
-  }
-}
-
-// Gestionnaire d'événements pour la soumission du formulaire
+// Gestionnaire d'événements pour soumettre le formulaire
 addImgForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (validateForm()) {
-    // Créez un objet FormData avec les données du formulaire
-    const formData = new FormData(addImgForm);
-    // Appelez la fonction pour soumettre le formulaire et ajouter un nouveau projet
-    await soumettreFormulaireEtAjouterProjet(formData);
+  e.preventDefault(); // Empêche la soumission du formulaire par défaut
+
+  const formData = new FormData(addImgForm);
+
+  try {
+    const response = await fetch(urlDataWorks, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${Token}`
+      },
+      body: formData,
+    });
+
+    if (response.ok) {
+      // Réinitialisez le formulaire après un envoi réussi
+      resetForm();
+
+      // Rafraîchissez la galerie
+      gallery.innerHTML = ""; // Effacez la galerie avant de la mettre à jour
+      affichageImage();
+    } else {
+      console.error("Échec de l'envoi du formulaire.");
+    }
+  } catch (error) {
+    console.error("Une erreur s'est produite lors de l'envoi du formulaire :", error);
   }
 });
-*/
+
+// Fonction pour charger les catégories depuis l'API et les ajouter au formulaire
+async function loadCategories() {
+
+  try {
+    // Récupérer les catégories depuis votre API (remplacez "urlCategories" par l'URL correcte)
+    const response = await fetch(urlDataCategorie);
+    const categories = await response.json();
+
+    // Ajouter les catégories au formulaire
+    categories.forEach((category) => {
+      const option = document.createElement('option');
+      option.value = category.id; // Assurez-vous que l'ID est la valeur appropriée
+      option.textContent = category.name; // Assurez-vous que "name" est le nom approprié
+      categorySelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Une erreur s'est produite lors du chargement des catégories :", error);
+  }
+}
+
+// Appelez la fonction pour charger les catégories
+loadCategories();
+
