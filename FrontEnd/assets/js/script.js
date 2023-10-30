@@ -140,7 +140,7 @@ const nextPage = document.getElementById('nextPage');
 const hrModalGallery = document.getElementById('hrModalGallery');
 const modalGallery = document.querySelector('.modal-gallery');
 const addImgForm = document.getElementById('addImgForm');
-const Token = localStorage.getItem("token");
+const userToken = localStorage.getItem("userToken");
 
 // Fonction pour modifier l'attribut aria-hidden des éléments
 function updateAriaHidden(elements, value) {
@@ -285,15 +285,26 @@ fetch('http://localhost:5678/api/works')
       // Ajoutez le bouton de suppression au tableau
       trashButtons.push(trashButton);
 
-      trashButton.addEventListener('click', async () => {
+        trashButton.addEventListener('click', async () => {
+          if (userToken !== null) {
+            if (confirm("Voulez-vous vraiment supprimer le projet ?")) {
+              deleteWork(project.id, userToken);
+            }
+          } else {
+              console.log("Suppression annulée par l'utilisateur.");
+          }
+        });
         
-        if(confirm("voulez vous vraiment supprimer le projet ?")){
-      
+        async function deleteWork(id, userToken) {
+        // Récupération du token
+        if (userToken !== null){ 
+          const tokenJson = JSON.parse(userToken);
+          const token = tokenJson.token;
           try {
-            const response = await fetch(`http://localhost:5678/api/works/${projectID}`, {
+            const response = await fetch(`http://localhost:5678/api/works/${id}`, {
               method: 'DELETE',
               headers: {
-                'Authorization': `Bearer ${Token}` // Utilisez le token d'authentification
+                'Authorization': `Bearer ${token}` // Utilisez le token d'authentification
               },
             });
 
@@ -314,7 +325,7 @@ fetch('http://localhost:5678/api/works')
             console.error("Une erreur s'est produite lors de la suppression du projet :", error);
           }
         }
-      });
+      }
     });
   })
   .catch(error => {
