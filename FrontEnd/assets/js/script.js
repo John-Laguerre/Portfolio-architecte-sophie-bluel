@@ -297,8 +297,12 @@ fetch('http://localhost:5678/api/works')
               },
             });
 
-            if (!response.ok) {
-              throw new Error(`Erreur lors de la suppression : ${response.status}`);
+            if (response.ok) {
+              console.log("Projet supprimé avec succès !");
+              gallery.innerHTML=""
+              affichageImage()
+            } else {
+              console.error("Une erreur s'est produite lors de la suppression du projet.");
             }
 
             // Supprimez l'élément du DOM (le projet) après suppression réussie
