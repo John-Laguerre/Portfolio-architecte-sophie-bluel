@@ -140,7 +140,7 @@ const nextPage = document.getElementById('nextPage');
 const hrModalGallery = document.getElementById('hrModalGallery');
 const modalGallery = document.querySelector('.modal-gallery');
 const addImgForm = document.getElementById('addImgForm');
-const userToken = localStorage.getItem("userToken");
+const userToken = window.localStorage.getItem("userToken");
 
 // Fonction pour modifier l'attribut aria-hidden des éléments
 function updateAriaHidden(elements, value) {
@@ -295,34 +295,34 @@ fetch('http://localhost:5678/api/works')
           deleteWork(project.id, userToken);
         }
       });
-      
-        async function deleteWork(id, userToken) {
+
+      async function deleteWork(id, userToken) {
           if (!userToken) {
             console.error("Le jeton n'est pas valide ou n'existe pas.");
             return;
           }
         
-          try {
-            const token = userToken;
+        try {
+          const token = userToken;
         
-            const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-              method: 'DELETE',
-              headers: {
-                Authorization: `Bearer ${token}`
-              },
-            });
+          const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+          });
         
-            if (response.ok) {
-              console.log("Projet supprimé avec succès !");
-              gallery.innerHTML = "";
-              await affichageImage(); // Attendre la mise à jour de la galerie
-            } else {
-              console.error("Une erreur s'est produite lors de la suppression du projet.");
-            }
-          } catch (error) {
-            console.error("Une erreur s'est produite lors de la suppression du projet :", error);
+          if (response.ok) {
+            console.log("Projet supprimé avec succès !");
+            gallery.innerHTML = "";
+            await affichageImage(); // Attendre la mise à jour de la galerie
+          } else {
+            console.error("Une erreur s'est produite lors de la suppression du projet.");
           }
+        } catch (error) {
+          console.error("Une erreur s'est produite lors de la suppression du projet :", error);
         }
+      }
     });
   })
   .catch(error => {
@@ -404,13 +404,14 @@ addImgForm.addEventListener('submit', async (e) => {
           formData.append('title', titleInput.value); // Ajoutez le titre
           formData.append('category', categorySelect.value); // Ajoutez la catégorie
 
-          const response = await fetch(`http://localhost:5678/api/works`, {
+          const response = await fetch('http://localhost:5678/api/works', {
             method: 'POST',
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            body: formData, // Utilisez l'objet FormData comme corps de la requête
+            body: formData,
           });
+
 
           if (response.ok) {
             console.log("Succès");
