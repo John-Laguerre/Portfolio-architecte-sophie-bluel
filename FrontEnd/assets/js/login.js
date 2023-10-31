@@ -1,30 +1,34 @@
-// login.js
-
 // Attend que le document HTML soit chargé avant d'exécuter le code
 document.addEventListener("DOMContentLoaded", function () {
   // Récupère le formulaire de connexion et le message d'erreur par leur ID
   const loginForm = document.getElementById("loginForm");
   const errorMessage = document.getElementById("errorMessage");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
 
   // Ajoute un gestionnaire d'événements lorsque le formulaire est soumis
   loginForm.addEventListener("submit", async function (e) {
     e.preventDefault(); // Empêche la soumission du formulaire par défaut
 
     // Récupère les valeurs de l'email et du mot de passe depuis les champs du formulaire
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
     // Vérifie si les champs email et password ne sont pas vides
     if (email.trim() === "" || password.trim() === "") {
-      errorMessage.textContent = "Veuillez remplir tous les chanps.";
+      errorMessage.textContent = "Veuillez remplir tous les champs.";
       return; // Arrête le traitement si les champs sont vides
     }
 
     // Vérifie le format de l'adresse e-mail
-    if (isValidEmail(email)) {
-      errorMessage.textContent = "L'aderesse e-mail n'est pas valide.";
-      return; // Arrête le traitement si les champs sont vides
+    if (!isValidEmail(email)) {
+      errorMessage.textContent = "L'adresse e-mail n'est pas valide.";
+      emailInput.classList.add("invalid-input"); // Ajoute une classe CSS pour la bordure rouge
+      return; // Arrête le traitement si l'adresse e-mail n'est pas valide
     }
+
+    // Si le champ email est valide, on retire la classe CSS pour enlever la bordure rouge
+    emailInput.classList.remove("invalid-input");
 
     // Crée un objet avec les informations d'identification de l'utilisateur
     const userCredentials = {
