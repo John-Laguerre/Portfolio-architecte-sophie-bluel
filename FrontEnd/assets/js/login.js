@@ -14,6 +14,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
+    // Vérifie si les champs email et password ne sont pas vides
+    if (email.trim() === "" || password.trim() === "") {
+      errorMessage.textContent = "Veuillez remplir tous les chanps.";
+      return; // Arrête le traitement si les champs sont vides
+    }
+
+    // Vérifie le format de l'adresse e-mail
+    if (isValidEmail(email)) {
+      errorMessage.textContent = "L'aderesse e-mail n'est pas valide.";
+      return; // Arrête le traitement si les champs sont vides
+    }
+
     // Crée un objet avec les informations d'identification de l'utilisateur
     const userCredentials = {
       email: email,
@@ -56,3 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
     loginLink.classList.add("active");
   }
 });
+
+// Fonction pour vérifier le format de l'adresse e-mail
+function isValidEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$/;
+  return emailRegex.test(email);
+}
