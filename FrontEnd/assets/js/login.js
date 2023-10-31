@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Récupère le lien de connexion dans la barre de navigation
   const loginLink = document.querySelector(".login-link");
+
   // Récupère le nom de la page actuellement affichée dans l'URL
   const currentPage = window.location.pathname.split("/").pop();
 
