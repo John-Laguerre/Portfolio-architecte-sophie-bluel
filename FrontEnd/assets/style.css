@@ -292,6 +292,10 @@ input[type="submit"]{
     color: #3D3D3D;
 }
 
+.invalid-input {
+	border: 1px solid red;
+}
+
 .login label {
 	margin: 2em 0 1em 0;
 }
