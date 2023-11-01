@@ -1,70 +1,80 @@
-const userMail = document.getElementById("email");
-const password = document.getElementById("password");
-const form = document.getElementById("loginForm")
-const message = document.getElementById("errorMessage")
+// Attend que le document HTML soit chargé avant d'exécuter le code
+document.addEventListener("DOMContentLoaded", function () {
+  // Récupère le formulaire de connexion et le message d'erreur par leur ID
+  const loginForm = document.getElementById("loginForm");
+  const errorMessage = document.getElementById("errorMessage");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
 
-// Fonction pour valider le format de l'e-mail
+  // Ajoute un gestionnaire d'événements lorsque le formulaire est soumis
+  loginForm.addEventListener("submit", async function (e) {
+    e.preventDefault(); // Empêche la soumission du formulaire par défaut
+
+    // Récupère les valeurs de l'email et du mot de passe depuis les champs du formulaire
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    // Vérifie si les champs email et password ne sont pas vides
+    if (email.trim() === "" || password.trim() === "") {
+      errorMessage.textContent = "Veuillez remplir tous les champs.";
+      return; // Arrête le traitement si les champs sont vides
+    }
+
+    // Vérifie le format de l'adresse e-mail
+    if (!isValidEmail(email)) {
+      errorMessage.textContent = "L'adresse e-mail n'est pas valide.";
+      emailInput.classList.add("invalid-input"); // Ajoute une classe CSS pour la bordure rouge
+      return; // Arrête le traitement si l'adresse e-mail n'est pas valide
+    }
+
+    // Si le champ email est valide, on retire la classe CSS pour enlever la bordure rouge
+    emailInput.classList.remove("invalid-input");
+
+    // Crée un objet avec les informations d'identification de l'utilisateur
+    const userCredentials = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      // Effectue une requête asynchrone vers le serveur pour l'authentification
+      const response = await fetch("http://localhost:5678/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userCredentials), // Convertit les informations en JSON
+      });
+
+      if (response.status === 200) {
+        // Si l'authentification est réussie (statut 200), traite la réponse
+        const data = await response.json(); // Récupère les données JSON de la réponse
+        window.localStorage.setItem("token", data.token); // Stocke le token dans le stockage local
+        window.location.href = 'index.html'; // Redirige vers la page d'accueil
+      } else {
+        // Si l'authentification échoue, affiche un message d'erreur
+        errorMessage.textContent =
+          "L'authentification a échoué. Vérifiez vos informations.";
+      }
+    } catch (error) {
+      console.error(error); // En cas d'erreur, affiche l'erreur dans la console
+    }
+  });
+
+  // Récupère le lien de connexion dans la barre de navigation
+  const loginLink = document.querySelector(".login-link");
+
+  // Récupère le nom de la page actuellement affichée dans l'URL
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // Vérifie si la page actuelle est "login.html" et ajoute une classe "active" au lien
+  if (currentPage === "login.html") {
+    loginLink.classList.add("active");
+  }
+});
+
+// Fonction pour vérifier le format de l'adresse e-mail
 function isValidEmail(email) {
-  // Utilisez une expression régulière pour vérifier le format de l'e-mail
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return emailRegex.test(email);
 }
-
-form.addEventListener("submit", async function (e) {
-  e.preventDefault(); // Empêche l'envoi du formulaire par défaut
-
-  // Récupère les valeurs de l'email et du mot de passe depuis les champs du formulaire
-  const email = userMail.value;
-  const pass = password.value;
-
-  // Vérifie si les champs email et password ne sont pas vides
-  if (email.trim() === "" || pass.trim() === "") {
-    message.textContent = "Veuillez remplir tous les champs.";
-    return; // Arrête le traitement si les champs sont vides
-  }
-
-  // Vérifie le format de l'e-mail
-  if (!isValidEmail(email)) {
-    message.textContent = "Adresse e-mail invalide. Veuillez vérifier le format.";
-    return; // Arrête le traitement si l'e-mail est invalide
-  }
-
-  const data = {
-    email: email,
-    password: pass,
-  };
-  const chargeUtile = JSON.stringify(data);
-
-  // Récupérer le token du serveur
-  try {
-    const responseLogin = await fetch("http://localhost:5678/api/users/login", {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: chargeUtile,
-    });
-
-    if (responseLogin.status === 200) {
-      const responseLoginJSON = await responseLogin.json();
-
-      const token = responseLoginJSON.token;
-      const userId = responseLoginJSON.userId;
-
-      const userToken = {
-        user: `${userId}`,
-        token: `${token}`
-      };
-
-      const valeurUserToken = JSON.stringify(userToken);
-      window.localStorage.setItem("userToken", valeurUserToken);
-      window.location.href = "index.html";
-    } else if (responseLogin.status === 404) {
-      message.innerText = "ERREUR Aucun utilisateur trouvé";
-    } else if (responseLogin.status === 401) {
-      message.innerText = "ERREUR mot de passe incorrecte";
-    }
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de la requête :", error);
-  }
-});
