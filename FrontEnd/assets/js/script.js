@@ -25,6 +25,7 @@ function createFigureElement(imageUrl, title) {
   const figure = document.createElement('figure');
   figure.innerHTML =`<img src="${imageUrl}" alt="${title}">
   <figcaption>${title}</figcaption>`;
+
   return figure;
 }
 
@@ -47,76 +48,76 @@ async function affichageImage() {
 
 // Création des boutons filtres
 async function afficherFilter() {
-  try {
-    const categories = await appelApiCategorie();
-    const filterLiensContainer = document.getElementById('filter__links');
-
-    // Créez le lien "Tous"
-    const allLien = document.createElement("a");
-    allLien.innerText = "Tous";
-    allLien.classList.add("filters");
-    allLien.id = "all";
-    filterLiensContainer.appendChild(allLien);
-
-    // Créez des boutons pour chaque catégorie en utilisant les données des catégories
-    categories.forEach((category) => {
-      const allFilter = document.createElement("a");
-      allFilter.innerText = category.name;
-      allFilter.id = category.id;
-      allFilter.classList.add("filters");
-      allFilter.classList.add("btn"); // Ajoutez la classe "btn" si nécessaire
-      filterLiensContainer.appendChild(allFilter);
-    });
-
-    // Ajoutez un gestionnaire d'événements au conteneur de filtres
-    filterLiensContainer.addEventListener("click", (event) => {
-      if (event.target.classList.contains("filters")) {
-        const lienId = event.target.id;
-
-        // Retirez la classe "active" de tous les filtres
-        document.querySelectorAll(".filters").forEach((filter) => {
-          filter.classList.remove("active");
-        });
-
-        event.target.classList.add("active");
-
-        filterProjectsByCategory(lienId);
-      }
-    });
-
-    // Ajoutez un gestionnaire d'événements au conteneur de filtres
-    filterLiensContainer.addEventListener("click", (event) => {
-      if (event.target.classList.contains("filters")) {
-        const lienId = event.target.id;
-        filterProjectsByCategory(lienId);
-      }
-    });
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de la récupération des catégories :", error);
-  }
+    try {
+      const categories = await appelApiCategorie();
+      const filterLiensContainer = document.getElementById('filter__links');
+  
+      // Créez le lien "Tous"
+      const allLien = document.createElement("a");
+      allLien.innerText = "Tous";
+      allLien.classList.add("filters");
+      allLien.id = "all";
+      filterLiensContainer.appendChild(allLien);
+  
+      // Créez des boutons pour chaque catégorie en utilisant les données des catégories
+      categories.forEach((category) => {
+        const allFilter = document.createElement("a");
+        allFilter.innerText = category.name;
+        allFilter.id = category.id;
+        allFilter.classList.add("filters");
+        allFilter.classList.add("btn"); // Ajoutez la classe "btn" si nécessaire
+        filterLiensContainer.appendChild(allFilter);
+      });
+  
+      // Ajoutez un gestionnaire d'événements au conteneur de filtres
+      filterLiensContainer.addEventListener("click", (event) => {
+        if (event.target.classList.contains("filters")) {
+          const lienId = event.target.id;
+  
+          // Retirez la classe "active" de tous les filtres
+          document.querySelectorAll(".filters").forEach((filter) => {
+            filter.classList.remove("active");
+          });
+  
+          event.target.classList.add("active");
+  
+          filterProjectsByCategory(lienId);
+        }
+      });
+  
+      // Ajoutez un gestionnaire d'événements au conteneur de filtres
+      filterLiensContainer.addEventListener("click", (event) => {
+        if (event.target.classList.contains("filters")) {
+          const lienId = event.target.id;
+          filterProjectsByCategory(lienId);
+        }
+      });
+    } catch (error) {
+      console.error("Une erreur s'est produite lors de la récupération des catégories :", error);
+    }
 }
-
+  
 // Fonction pour filtrer les projets en fonction de la catégorie sélectionnée
 function filterProjectsByCategory(categoryId) {
-  gallery.innerHTML = ""; // Efface la galerie avant d'ajouter de nouvelles images
-
-  if (categoryId === "all") {
-    // Affichez tous les projets
-    works.forEach((project) => {
-      const projectFigure = createFigureElement(project.imageUrl, project.title);
-      gallery.appendChild(projectFigure);
-    });
-  } else {
-    // Filtrer les projets par catégorie
-    works.forEach((project) => {
-      if (project.categoryId.toString() === categoryId) {
+    gallery.innerHTML = ""; // Efface la galerie avant d'ajouter de nouvelles images
+  
+    if (categoryId === "all") {
+      // Affichez tous les projets
+      works.forEach((project) => {
         const projectFigure = createFigureElement(project.imageUrl, project.title);
         gallery.appendChild(projectFigure);
-      }
-    });
-  }
+      });
+    } else {
+      // Filtrer les projets par catégorie
+      works.forEach((project) => {
+        if (project.categoryId.toString() === categoryId) {
+          const projectFigure = createFigureElement(project.imageUrl, project.title);
+          gallery.appendChild(projectFigure);
+        }
+      });
+    }
 }
-
+  
 // Appeler la fonction pour afficher les filtres et les images
 afficherFilter();
 affichageImage();
@@ -128,7 +129,7 @@ const header = document.querySelector('header');
 const loginLink = document.querySelector(".login-link");
 const logoutLink = document.querySelector(".logout-link");
 const modeEditOverlay = document.querySelector('.mode-edit-overlay');
-const editlink = document.querySelector('.edit-link');
+const editModif = document.querySelector('.edit-modif');
 const filterLinksContainer = document.getElementById('filter__links');
 const modalOverlay = document.getElementById('modal-overlay');
 const closeModalButton = document.querySelector('.close-modal-button');
@@ -182,7 +183,7 @@ if (logoutLink) {
   if (localStorage.getItem("token")) {
     // L'utilisateur est connecté, affichez le mode édition
     showElements([modeEditOverlay]);
-    editlink.classList.remove('display-none');
+    editModif.classList.remove('display-none');
     loginLink.style.display = 'none'; // Masquez le lien de connexion
     logoutLink.style.display = 'block'; // Affichez le lien de déconnexion
     header.style.marginTop = '109px'; // Ajoutez une marge au header
@@ -201,7 +202,7 @@ if (logoutLink) {
   }
 
   // Gestionnaire d'événements pour ouvrir la modale au clic sur le bouton "Modifier"
-  editlink.addEventListener("click", function () {
+  editModif.addEventListener("click", function () {
     showElements([modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage]);
   });
 
@@ -453,4 +454,3 @@ async function loadCategories() {
 
 // Appelez la fonction pour charger les catégories
 loadCategories();
-
