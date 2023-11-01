@@ -283,9 +283,6 @@ fetch('http://localhost:5678/api/works')
       modalGalleryDiv.appendChild(trashButton);
       modalGallery.appendChild(modalGalleryDiv);
 
-      // Ajoutez le bouton de suppression au tableau
-      trashButtons.push(trashButton);
-
       trashButton.addEventListener('click', async () => {
         if (!userToken) {
           console.log("Suppression annulée par l'utilisateur.");
@@ -293,37 +290,54 @@ fetch('http://localhost:5678/api/works')
         }
       
         if (confirm("Voulez-vous vraiment supprimer le projet ?")) {
-          deleteWork(project.id, userToken);
+          try {
+            await deleteWork(project.id, userToken);
+            removeProjectFromDOM(trashButton); // Appelez la fonction pour supprimer l'élément du DOM
+          } catch (error) {
+            console.error("Une erreur s'est produite lors de la suppression du projet:", error);
+          }
         }
       });
-
-      async function deleteWork(id, userToken) {
-          if (!userToken) {
-            console.error("Le jeton n'est pas valide ou n'existe pas.");
-            return;
-          }
-        
-        try {
-          const token = userToken;
-        
-          const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          });
-        
-          if (response.ok) {
-            console.log("Projet supprimé avec succès !");
-            gallery.innerHTML = "";
-            await affichageImage(); // Attendre la mise à jour de la galerie
-          } else {
-            console.error("Une erreur s'est produite lors de la suppression du projet.");
-          }
-        } catch (error) {
-          console.error("Une erreur s'est produite lors de la suppression du projet :", error);
-        }
+      
+      // Ajoutez une fonction pour supprimer un projet du DOM
+      function removeProjectFromDOM(trashButton) {
+        // Récupérez le parent de l'élément à supprimer (modalGalleryDiv)
+        const parentElement = trashButton.parentElement;
+      
+        // Supprimez l'élément du DOM
+        parentElement.remove();
       }
+      
+
+        // fonction pour supprimer les works 
+      async function deleteWork(id) {
+        // Récupération du token
+        if (userToken !== null) {
+            const tokenJson = JSON.parse(userToken);
+            const token = tokenJson.token;
+
+        
+                try {
+                    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+                        method: "DELETE",
+                        headers: { "Authorization": `Bearer ${token}` },
+                    });
+
+                    if (response.ok) {
+                        console.log("Projet supprimé avec succès !");
+                        gallery.innerHTML=""
+                        affichageImage()
+                        
+                    } else {
+                        console.error("Une erreur s'est produite lors de la suppression du projet.");
+                    }
+                } catch (error) {
+                    console.error("Une erreur s'est produite :", error);
+                }
+            } else {
+                console.log("Suppression annulée par l'utilisateur.");
+            }
+        }
     });
   })
   .catch(error => {
@@ -389,46 +403,36 @@ previewImg.addEventListener('click', () => {
   removePreviewPicture();
 });
 
-addImgForm.addEventListener('submit', async (e) => {
-  e.preventDefault(); // Empêche la soumission du formulaire par défaut
-
+addImgForm.addEventListener("click", async function (e) {
+  e.preventDefault();
+  
   if (addInput.value !== "" && titleInput.value !== "" && categorySelect.value !== "") {
-    if (userToken !== null) {
-      const tokenJson = JSON.parse(userToken);
-      let token = tokenJson.token;
+      if (userToken !== null) {
+          const tokenJson = JSON.parse(userToken);
+          let token = tokenJson.token;
 
-      if (confirm(`Voulez-vous vraiment ajouter le projet ?`)) {
-        try {
-          const formData = new FormData(); // Créez un objet FormData pour envoyer des données multipart/form-data
-
-          formData.append('image', addInput.files[0]); // Ajoutez le fichier image
-          formData.append('title', titleInput.value); // Ajoutez le titre
-          formData.append('category', categorySelect.value); // Ajoutez la catégorie
-
-          const response = await fetch('http://localhost:5678/api/works', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-          });
-
-
-          if (response.ok) {
-            console.log("Succès");
-            addImgForm.reset();
-            gallery.innerHTML = "";
-            affichageImage();
-          } else {
-            console.log("Erreur");
+          if (confirm(`Voulez-vous vraiment ajouter le projet ?`)) {
+              try {
+                  const response = await fetch(`http://localhost:5678/api/works`, {
+                      method: "POST",
+                      headers: { "Authorization": `Bearer ${token}` },
+                      body: new FormData // récupère directement les données du formulaire
+                  })
+                  if (response.ok) {
+                      console.log("Succès")
+                      addImgForm.reset()
+                      gallery.innerHTML=""
+                      affichageImage()
+                  } else {
+                      console.log("Erreur")
+                  }
+              } catch (error) {
+                  console.error("Erreur lors de la requête :", error)
+              }
           }
-        } catch (error) {
-          console.error("Une erreur s'est produite lors de l'envoi du formulaire :", error);
-        }
       }
-    }
   } else {
-    alert("Veuillez remplir tous les champs");
+      alert("Veuillez remplir tous les champs");
   }
 });
 
