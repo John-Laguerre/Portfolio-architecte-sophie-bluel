@@ -81,7 +81,8 @@ h1{
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
+	gap: 4px;
 }
 
 h1 > span {
@@ -135,6 +136,10 @@ li a:visited {
 	font-size: 18px;
 }
 
+.insta {
+	width: 24px;
+	height: 24px;
+}
 /* Introduction */
 #introduction {
 	display: flex;
@@ -157,7 +162,8 @@ li a:visited {
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+	margin-bottom: 1.5em;
+	width: 404px;
 }
 
 /* PORTFOLIO */
@@ -337,7 +343,7 @@ footer {
 	gap: 21px;
 }
 
-.edit-link {
+.edit-modif {
 	display: flex;
 	gap: 10px;
 	position: absolute;
