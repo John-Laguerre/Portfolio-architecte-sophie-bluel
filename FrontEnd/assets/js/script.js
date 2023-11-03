@@ -382,38 +382,44 @@ previewImg.addEventListener('click', () => {
   removePreviewPicture();
 });
 
-addImgForm.addEventListener("click", async function (e) {
-  e.preventDefault();
-  
-  if (addInput.value !== "" && titleInput.value !== "" && categorySelect.value !== "") {
-      if (userToken !== null) {
-          const tokenJson = JSON.parse(userToken);
-          let token = tokenJson.token;
-
-          if (confirm(`Voulez-vous vraiment ajouter le projet ?`)) {
-              try {
-                  const response = await fetch(`http://localhost:5678/api/works`, {
-                      method: "POST",
-                      headers: { "Authorization": `Bearer ${token}` },
-                      body: new FormData // récupère directement les données du formulaire
-                  })
-                  if (response.ok) {
-                      console.log("Succès")
-                      addImgForm.reset()
-                      gallery.innerHTML=""
-                      affichageImage()
-                  } else {
-                      console.log("Erreur")
-                  }
-              } catch (error) {
-                  console.error("Erreur lors de la requête :", error)
-              }
-          }
-      }
-  } else {
-      alert("Veuillez remplir tous les champs");
-  }
+submitButton.addEventListener('click', () => {
+  submiForm() // fonction pour gérer l'envoi des données
 });
+
+function submiForm() {
+  const title = titleInput.value;
+  const category = categorySelect.value;
+  const image = fileInput.files[0];
+
+  if (!title || !category || !image) {
+    errorText.textContent = "Veuillez remplir tous les champs.";
+
+    return
+  }
+
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('category', category);
+  formData.append('image', image);
+
+  fetch(urlForSubmittingData, {
+    method: 'POST',
+    body: formData,
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("Succès")
+        resetForm()
+        gallery.innerHTML=""
+        affichageImage()
+      } else {
+        errorText.textContent = "Une erreur s'est produite lors de l'envoi des données.";
+      }
+    })
+    .catch((error) => {
+      console.error("Une erreur s'est produite lors de l'envoi des données :", error);
+    });
+}
 
 // Fonction pour charger les catégories depuis l'API et les ajouter au formulaire
 async function loadCategories() {
