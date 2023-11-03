@@ -143,6 +143,8 @@ const modalGallery = document.querySelector('.modal-gallery');
 const addImgForm = document.getElementById('addImgForm');
 const userToken = window.localStorage.getItem("userToken");
 
+console.log(userToken)
+
 // Fonction pour modifier l'attribut aria-hidden des éléments
 function updateAriaHidden(elements, value) {
   elements.forEach(element => {
@@ -283,61 +285,38 @@ fetch('http://localhost:5678/api/works')
       modalGalleryDiv.appendChild(trashButton);
       modalGallery.appendChild(modalGalleryDiv);
 
+      trashButtons.push(trashButton);
+
       trashButton.addEventListener('click', async () => {
-        if (!userToken) {
-          console.log("Suppression annulée par l'utilisateur.");
-          return;
-        }
-      
-        if (confirm("Voulez-vous vraiment supprimer le projet ?")) {
-          try {
-            await deleteWork(project.id, userToken);
-            removeProjectFromDOM(trashButton); // Appelez la fonction pour supprimer l'élément du DOM
-          } catch (error) {
-            console.error("Une erreur s'est produite lors de la suppression du projet:", error);
-          }
-        }
-      });
-      
-      // Ajoutez une fonction pour supprimer un projet du DOM
-      function removeProjectFromDOM(trashButton) {
-        // Récupérez le parent de l'élément à supprimer (modalGalleryDiv)
-        const parentElement = trashButton.parentElement;
-      
-        // Supprimez l'élément du DOM
-        parentElement.remove();
-      }
-      
+  if (!userToken) {
+    console.log("Suppression annulée par l'utilisateur.");
+    return;
+  }
 
-        // fonction pour supprimer les works 
-      async function deleteWork(id) {
-        // Récupération du token
-        if (userToken !== null) {
-            const tokenJson = JSON.parse(userToken);
-            const token = tokenJson.token;
+  const projectId = projectID; // Récupérez l'ID du projet à supprimer
 
-        
-                try {
-                    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-                        method: "DELETE",
-                        headers: { "Authorization": `Bearer ${token}` },
-                    });
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${projectId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${userToken}` // Ajoutez un en-tête d'autorisation si nécessaire
+      },
+    });
 
-                    if (response.ok) {
-                        console.log("Projet supprimé avec succès !");
-                        gallery.innerHTML=""
-                        affichageImage()
-                        
-                    } else {
-                        console.error("Une erreur s'est produite lors de la suppression du projet.");
-                    }
-                } catch (error) {
-                    console.error("Une erreur s'est produite :", error);
-                }
-            } else {
-                console.log("Suppression annulée par l'utilisateur.");
-            }
-        }
+    if (response.ok) {
+      // La suppression a réussi
+      console.log(`Le projet avec l'ID ${projectId} a été supprimé.`);
+      // Vous pouvez également actualiser la liste des projets ou le DOM ici
+    } else {
+      // Gérer les erreurs, par exemple, afficher un message d'erreur
+      console.error(`Échec de la suppression du projet avec l'ID ${projectId}.`);
+    }
+  } catch (error) {
+    console.error("Une erreur s'est produite lors de la suppression du projet :", error);
+  }
+});
+
+
     });
   })
   .catch(error => {
