@@ -141,9 +141,7 @@ const nextPage = document.getElementById('nextPage');
 const hrModalGallery = document.getElementById('hrModalGallery');
 const modalGallery = document.querySelector('.modal-gallery');
 const addImgForm = document.getElementById('addImgForm');
-const userToken = window.localStorage.getItem("userToken");
-
-console.log(userToken)
+const userToken = window.localStorage.getItem("token");
 
 // Fonction pour modifier l'attribut aria-hidden des éléments
 function updateAriaHidden(elements, value) {
@@ -287,16 +285,19 @@ fetch('http://localhost:5678/api/works')
 
       trashButtons.push(trashButton);
 
-      trashButton.addEventListener('click', async () => {
+      modalGalleryDiv.setAttribute('data-workid', projectID)
+
+      trashButton.addEventListener('click', async (e) => {
+        e.preventDefault();
   if (!userToken) {
     console.log("Suppression annulée par l'utilisateur.");
     return;
   }
 
-  const projectId = projectID; // Récupérez l'ID du projet à supprimer
+  const workId = projectID; // Récupérez l'ID du projet à supprimer
 
   try {
-    const response = await fetch(`http://localhost:5678/api/works/${projectId}`, {
+    const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${userToken}` // Ajoutez un en-tête d'autorisation si nécessaire
@@ -305,11 +306,25 @@ fetch('http://localhost:5678/api/works')
 
     if (response.ok) {
       // La suppression a réussi
-      console.log(`Le projet avec l'ID ${projectId} a été supprimé.`);
+      console.log(`Le projet avec l'ID ${workId} a été supprimé.`);
       // Vous pouvez également actualiser la liste des projets ou le DOM ici
+
+      // Supprimez l'élément du DOM correspondant à workId dans la galerie principale
+      const workFigure = document.querySelector(`figure[data-workid="${workId}"]`);
+      if (workFigure) {
+        workFigure.remove();
+      }
+
+      // Supprimez l'élément du DOM correspondant à workId dans la galerie modale
+      const modalGalleryDiv = document.querySelector(`div[data-workid="${workId}"]`);
+      if (modalGalleryDiv) {
+        modalGalleryDiv.remove();
+      }
+
+      affichageImage();
     } else {
       // Gérer les erreurs, par exemple, afficher un message d'erreur
-      console.error(`Échec de la suppression du projet avec l'ID ${projectId}.`);
+      console.error(`Échec de la suppression du projet avec l'ID ${workId}.`);
     }
   } catch (error) {
     console.error("Une erreur s'est produite lors de la suppression du projet :", error);
@@ -382,44 +397,38 @@ previewImg.addEventListener('click', () => {
   removePreviewPicture();
 });
 
-submitButton.addEventListener('click', () => {
-  submiForm() // fonction pour gérer l'envoi des données
-});
+submitButton.addEventListener("click", async function (e) {
+  e.preventDefault();
+  
+  if (addInput.value !== "" && titleInput.value !== "" && categorySelect.value !== "") {
+      if (userToken !== null) {
+          const tokenJson = JSON.parse(userToken);
+          let token = tokenJson.token;
 
-function submiForm() {
-  const title = titleInput.value;
-  const category = categorySelect.value;
-  const image = fileInput.files[0];
-
-  if (!title || !category || !image) {
-    errorText.textContent = "Veuillez remplir tous les champs.";
-
-    return
-  }
-
-  const formData = new FormData();
-  formData.append('title', title);
-  formData.append('category', category);
-  formData.append('image', image);
-
-  fetch(urlForSubmittingData, {
-    method: 'POST',
-    body: formData,
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        console.log("Succès")
-        resetForm()
-        gallery.innerHTML=""
-        affichageImage()
-      } else {
-        errorText.textContent = "Une erreur s'est produite lors de l'envoi des données.";
+          if (confirm(`Voulez-vous vraiment ajouter le projet ?`)) {
+              try {
+                  const response = await fetch(`http://localhost:5678/api/works`, {
+                      method: "POST",
+                      headers: { "Authorization": `Bearer ${token}` },
+                      body: new FormData // récupère directement les données du formulaire
+                  })
+                  if (response.ok) {
+                      console.log("Succès")
+                      resetForm()
+                      gallery.innerHTML=""
+                      affichageImage()
+                  } else {
+                      console.log("Erreur")
+                  }
+              } catch (error) {
+                  console.error("Erreur lors de la requête :", error)
+              }
+          }
       }
-    })
-    .catch((error) => {
-      console.error("Une erreur s'est produite lors de l'envoi des données :", error);
-    });
-}
+  } else {
+      alert("Veuillez remplir tous les champs");
+  }
+});
 
 // Fonction pour charger les catégories depuis l'API et les ajouter au formulaire
 async function loadCategories() {
