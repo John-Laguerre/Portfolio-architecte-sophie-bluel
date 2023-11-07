@@ -260,7 +260,7 @@ input[type="submit"]{
 	color: white;
 	background-color: #1D6154;
 	margin : 2em auto ;
-	width: 180px;
+	width: 237px;
 	text-align: center;
 	border-radius: 60px ;
 }
@@ -383,6 +383,7 @@ footer {
 }
 
 .modal-content .modal-img-button {
+	height: 36px;
 	font-size: 14px;
 	font-family: 'Syne';
 	font-weight: 700;
