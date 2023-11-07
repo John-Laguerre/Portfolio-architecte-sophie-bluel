@@ -176,14 +176,14 @@ li a:visited {
 	position: relative;
 }
 
-#filter__links {
+.filter__links {
 	display: flex;
 	margin: 51px;
 	gap: 10px;
 	justify-content: center;
 }
 
-#filter__links .filters {
+.filter__links a {
     text-align: center;
     font-family: Syne;
     font-size: 16px;
@@ -199,14 +199,10 @@ li a:visited {
     text-decoration: none;
 }
 
-#filter__links .filters:hover {
+.filter__links .active,
+.filter__links .filters:hover {
 	color: #fff;
 	background-color: #1D6154;
-}
-
-#filter__links .active {
-    background-color: #1D6154;
-    color: #fff;
 }
 
 .gallery {
