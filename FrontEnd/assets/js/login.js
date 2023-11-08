@@ -1,80 +1,83 @@
-// Attend que le document HTML soit chargé avant d'exécuter le code
-document.addEventListener("DOMContentLoaded", function () {
-  // Récupère le formulaire de connexion et le message d'erreur par leur ID
-  const loginForm = document.getElementById("loginForm");
-  const errorMessage = document.getElementById("errorMessage");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
+document.addEventListener('DOMContentLoaded', function () {
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const submitButton = document.getElementById('login-submit');
 
-  // Ajoute un gestionnaire d'événements lorsque le formulaire est soumis
-  loginForm.addEventListener("submit", async function (e) {
-    e.preventDefault(); // Empêche la soumission du formulaire par défaut
+  submitButton.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-    // Récupère les valeurs de l'email et du mot de passe depuis les champs du formulaire
-    const email = emailInput.value;
-    const password = passwordInput.value;
+    checkLoginFormValidity(emailInput, passwordInput);
 
-    // Vérifie si les champs email et password ne sont pas vides
-    if (email.trim() === "" || password.trim() === "") {
-      errorMessage.textContent = "Veuillez remplir tous les champs.";
-      return; // Arrête le traitement si les champs sont vides
-    }
+    if (!emailInput.classList.contains('error-input') && !passwordInput.classList.contains('error-input')) {
+      const email = emailInput.value;
+      const password = passwordInput.value;
 
-    // Vérifie le format de l'adresse e-mail
-    if (!isValidEmail(email)) {
-      errorMessage.textContent = "L'adresse e-mail n'est pas valide.";
-      emailInput.classList.add("invalid-input"); // Ajoute une classe CSS pour la bordure rouge
-      return; // Arrête le traitement si l'adresse e-mail n'est pas valide
-    }
-
-    // Si le champ email est valide, on retire la classe CSS pour enlever la bordure rouge
-    emailInput.classList.remove("invalid-input");
-
-    // Crée un objet avec les informations d'identification de l'utilisateur
-    const userCredentials = {
-      email: email,
-      password: password,
-    };
-
-    try {
-      // Effectue une requête asynchrone vers le serveur pour l'authentification
-      const response = await fetch("http://localhost:5678/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userCredentials), // Convertit les informations en JSON
-      });
-
-      if (response.status === 200) {
-        // Si l'authentification est réussie (statut 200), traite la réponse
-        const data = await response.json(); // Récupère les données JSON de la réponse
-        window.localStorage.setItem("token", data.token); // Stocke le token dans le stockage local
-        window.location.href = 'index.html'; // Redirige vers la page d'accueil
-      } else {
-        // Si l'authentification échoue, affiche un message d'erreur
-        errorMessage.textContent =
-          "L'authentification a échoué. Vérifiez vos informations.";
+      if (!validateEmail(email)) {
+        showValidationError(emailInput, 'Format incorrect');
+        return;
       }
-    } catch (error) {
-      console.error(error); // En cas d'erreur, affiche l'erreur dans la console
+
+      const data = {
+        email: email,
+        password: password,
+      };
+
+      try {
+        const response = await fetch('http://localhost:5678/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          const token = responseData.token;
+          localStorage.setItem('token', token);
+          window.location.href = 'index.html';
+        } else if (response.status === 401) {
+          throw new Error('Adresse mail ou mot de passe invalide');
+        } else {
+          throw new Error('Erreur lors de la connexion');
+        }
+      } catch (error) {
+        showValidationError(passwordInput, error.message);
+        passwordInput.value = '';
+      }
     }
   });
 
-  // Récupère le lien de connexion dans la barre de navigation
-  const loginLink = document.querySelector(".login-link");
+ // Récupère le lien de connexion dans la barre de navigation
+ const loginLink = document.querySelector(".login-link");
 
-  // Récupère le nom de la page actuellement affichée dans l'URL
-  const currentPage = window.location.pathname.split("/").pop();
+ // Récupère le nom de la page actuellement affichée dans l'URL
+ const currentPage = window.location.pathname.split("/").pop();
 
-  // Vérifie si la page actuelle est "login.html" et ajoute une classe "active" au lien
-  if (currentPage === "login.html") {
-    loginLink.classList.add("active");
-  }
+ // Vérifie si la page actuelle est "login.html" et ajoute une classe "active" au lien
+ if (currentPage === "login.html") {
+   loginLink.classList.add("active");
+ }
+
+ emailInput.addEventListener('input', function () {
+   hideValidationError(emailInput);
+   if (emailInput.value.trim() === '') {
+     showValidationError(emailInput, 'Champ requis');
+   } else if (!validateEmail(emailInput.value.trim())) {
+     showValidationError(emailInput, 'Format incorrect');
+   } else {
+     hideValidationError(emailInput);
+   }
+ });
+
+ passwordInput.addEventListener('input', function () {
+   if (passwordInput.value === '') {
+     showValidationError(passwordInput, 'Champ requis');
+   } else {
+     hideValidationError(passwordInput);
+   }
+ });
+ 
 });
 
-// Fonction pour vérifier le format de l'adresse e-mail
-function isValidEmail(email) {
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  return emailRegex.test(email);
-}
