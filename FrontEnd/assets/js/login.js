@@ -60,24 +60,24 @@ document.addEventListener('DOMContentLoaded', function () {
    loginLink.classList.add("active");
  }
 
- emailInput.addEventListener('input', function () {
-   hideValidationError(emailInput);
-   if (emailInput.value.trim() === '') {
-     showValidationError(emailInput, 'Champ requis');
-   } else if (!validateEmail(emailInput.value.trim())) {
-     showValidationError(emailInput, 'Format incorrect');
-   } else {
-     hideValidationError(emailInput);
-   }
- });
+  emailInput.addEventListener('input', function () {
+  hideValidationError(emailInput, false);
+  if (emailInput.value.trim() === '') {
+      showValidationError(emailInput, false);
+  } else if (!validateEmail(emailInput.value.trim())) {
+      showValidationError(emailInput, false, 'Format incorrect');
+  } else {
+      hideValidationError(emailInput, false);
+  }
+  });
 
- passwordInput.addEventListener('input', function () {
-   if (passwordInput.value === '') {
-     showValidationError(passwordInput, 'Champ requis');
-   } else {
-     hideValidationError(passwordInput);
-   }
- });
+  passwordInput.addEventListener('input', function () {
+  if (passwordInput.value === '') {
+      showValidationError(passwordInput, false);
+  } else {
+      hideValidationError(passwordInput, false);
+  }
+  });
  
 });
 
