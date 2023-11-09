@@ -1,6 +1,5 @@
 // Fetch Works
-fetch('http://localhost:5678/api/works')
-	.then(response => response.json())
+fetchWorks ()
 	.then(data => {
 		const portfolioSection = document.getElementById('portfolio');
 		const gallery = portfolioSection.querySelector('.gallery');
@@ -63,11 +62,11 @@ fetch('http://localhost:5678/api/works')
 	})
 	.catch(error => {
 		console.error('Erreur lors de la récupération des données:', error);
-	});
+});
+
 
 // Fetch Categories
-fetch('http://localhost:5678/api/categories')
-.then(response => response.json())
+fetchCategory ()
 .then(data => {
   const filterLinksContainer = document.querySelector('.filter__links');
 
@@ -207,13 +206,16 @@ if (logoutLink) {
 // modal
 
 // Sélection des éléments pour la navigation et la gestion du modal de galerie
+const titleInput = document.getElementById('title');
 const categorySelect = document.getElementById('category');
 const submitButton = document.querySelector('.modal-img-button');
 const fileInputDiv = document.querySelector('.img-add');
-const addInput = document.getElementById('add-image')
+const addText = document.querySelector('.add-text');
+const imgIcon = document.querySelector('.imgIcon');
+const errorText = document.querySelector('.error');
 const fileInput = document.querySelector('.img-add input[type="file"]');
+const buttonAdd = document.querySelector('.button-add');
 const previewImg = document.getElementById('preview');
-
 
 // Gestionnaire d'événements pour le changement de fichier
 fileInput.addEventListener('change', () => {
@@ -246,80 +248,72 @@ submitButton.addEventListener('click', async (e) => {
 
   if (!submitButton.classList.contains('disabled')) {
 
-      e.preventDefault();
-      const formData = new FormData();
+    e.preventDefault();
+    const formData = new FormData();
 
-      formData.append('image', fileInput.files[0]);
-      formData.append('title', titleInput.value);
-      formData.append('category', categorySelect.value);
+    formData.append('image', fileInput.files[0]);
+    formData.append('title', titleInput.value);
+    formData.append('category', categorySelect.value);
 
-      fetch('http://localhost:5678/api/works', {
+    fetchSend(userToken)
+      .then(response => response.json())
+      .then(data => {
+        const portfolioSection = document.getElementById('portfolio');
+        const gallery = portfolioSection.querySelector('.gallery');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
-          method: 'POST',
-          headers: {
-              'Authorization': `Bearer ${userToken}`
-          },
-          body: formData
+        const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
+        hideElements(hide);
 
-      })
-          .then(response => response.json())
-          .then(data => {
-              const portfolioSection = document.getElementById('portfolio');
-              const gallery = portfolioSection.querySelector('.gallery');
-              const modalOverlay = document.getElementById('modal-overlay');
-              const modalGallery = modalOverlay.querySelector('.modal-gallery');
+          const figure = document.createElement('figure');
+          const image = document.createElement('img');
+          const figcaption = document.createElement('figcaption');
 
-              const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
-              hideElements(hide);
+          figure.dataset.category = categorySelect.value;
+          figure.dataset.projectId = data.id;
 
-              const figure = document.createElement('figure');
-              const image = document.createElement('img');
-              const figcaption = document.createElement('figcaption');
+          image.src = URL.createObjectURL(fileInput.files[0]);
+          image.alt = titleInput.value;
+          figcaption.textContent = titleInput.value;
 
-              figure.dataset.category = categorySelect.value;
-              figure.dataset.projectId = data.id;
+          figure.appendChild(image);
+          figure.appendChild(figcaption);
+          gallery.appendChild(figure);
 
-              image.src = URL.createObjectURL(fileInput.files[0]);
-              image.alt = titleInput.value;
-              figcaption.textContent = titleInput.value;
+          // Modal Gallery
+          const modalGalleryDiv = document.createElement('div');
+          const modalGalleryImg = document.createElement('img');
+          const trashButton = document.createElement('a');
+          const trashIcon = document.createElement('i');
 
-              figure.appendChild(image);
-              figure.appendChild(figcaption);
-              gallery.appendChild(figure);
+          modalGalleryDiv.style.position = "relative";
 
-              // Modal Gallery
-              const modalGalleryDiv = document.createElement('div');
-              const modalGalleryImg = document.createElement('img');
-              const trashButton = document.createElement('a');
-              const trashIcon = document.createElement('i');
+          trashButton.classList.add('delete-icon');
+          trashButton.dataset.projectId = data.id;
 
-              modalGalleryDiv.style.position = "relative";
+          modalGalleryImg.src = URL.createObjectURL(fileInput.files[0]);
+          modalGalleryImg.alt = titleInput.value;
 
-              trashButton.classList.add('delete-icon');
-              trashButton.dataset.projectId = data.id;
+          trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
 
-              modalGalleryImg.src = URL.createObjectURL(fileInput.files[0]);
-              modalGalleryImg.alt = titleInput.value;
+          modalGalleryDiv.appendChild(modalGalleryImg);
+          trashButton.appendChild(trashIcon);
+          modalGalleryDiv.appendChild(trashButton);
+          modalGallery.appendChild(modalGalleryDiv)
 
-              trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
-
-              modalGalleryDiv.appendChild(modalGalleryImg);
-              trashButton.appendChild(trashIcon);
-              modalGalleryDiv.appendChild(trashButton);
-              modalGallery.appendChild(modalGalleryDiv)
-
-              trashButton.addEventListener('click', () => {
-                  const projectId = trashButton.dataset.projectId;
+          trashButton.addEventListener('click', () => {
+            const projectId = trashButton.dataset.projectId;
   
-                  deleteProject(projectId);
-              });
-
-              console.log(data);
-              resetForm();
-          })
-          .catch(err => {
-              console.error(err);
+            deleteProject(projectId);
           });
+
+          console.log(data);
+          resetForm();
+        }) 
+    .catch(err => {
+      console.error(err);
+    });
   } else {
       e.preventDefault();
       if (titleInput.value.trim() === '') {
