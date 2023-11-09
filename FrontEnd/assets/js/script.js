@@ -118,25 +118,6 @@ fetch('http://localhost:5678/api/categories')
   console.error('Erreur lors de la récupération des données:', error);
 });
 
-// Filter
-function filterProjects(category) {
-	const gallery = document.querySelector('.gallery');
-	const projects = gallery.querySelectorAll('figure');
-
-	projects.forEach(project => {
-		const projectCategory = project.dataset.category;
-
-		if (category === 'all' || projectCategory === category) {
-            const show = [project];
-			showElements(show);
-		} else {
-            const hide = [project];
-            hideElements(hide);
-		}
-	});
-}
-
-
 // mode édition
 
 // Sélection des éléments de l'interface utilisateur pour le mode édition
@@ -157,33 +138,6 @@ const hrModalGallery = document.getElementById('hrModalGallery');
 const modalGallery = document.querySelector('.modal-gallery');
 const addImgForm = document.getElementById('addImgForm');
 const userToken = window.localStorage.getItem("token");
-
-// Fonction pour modifier l'attribut aria-hidden des éléments
-function updateAriaHidden(elements, value) {
-  elements.forEach(element => {
-    if (element) {
-      element.setAttribute("aria-hidden", value);
-    }
-  });
-}
-
-// Fonction pour afficher les éléments
-function showElements(elements) {
-  elements.forEach(element => {
-    if (element && element.classList) {
-      element.classList.remove("display-none");
-    }
-  });
-}
-
-// Fonction pour masquer les éléments
-function hideElements(elements) {
-  elements.forEach(element => {
-    if (element && element.classList) {
-      element.classList.add("display-none");
-    }
-  });
-}
 
 // Gestionnaire d'événements pour le bouton de déconnexion
 if (logoutLink) {
@@ -252,80 +206,14 @@ if (logoutLink) {
 
 // modal
 
-// Delete project
-function deleteProject(projectId) {
-  const token = localStorage.getItem("token");
-  const elementDeleted = document.querySelector(`.delete-icon[data-project-id="${projectId}"]`);
-  const portfolioDeleted = document.querySelector(`figure[data-project-id="${projectId}"]`);
-  const galleryDeleted = elementDeleted.parentElement;
-
-  fetch(`http://localhost:5678/api/works/${projectId}`, {
-      method: 'DELETE',
-      headers: {
-          'Authorization': `Bearer ${token}`
-      }
-  })
-      .then(response => {
-          if (response.ok) {
-              portfolioDeleted.remove();
-              galleryDeleted.remove();
-              console.log(`Le projet avec l'ID ${projectId} a été supprimé.`);
-          } else {
-              console.log(`Une erreur s'est produite lors de la suppression du projet avec l'ID ${projectId}.`);
-          }
-      })
-      .catch(error => {
-          console.log('Une erreur s\'est produite lors de la communication avec l\'API :', error);
-      });
-}
-
 // Sélection des éléments pour la navigation et la gestion du modal de galerie
-const titleInput = document.getElementById('title');
 const categorySelect = document.getElementById('category');
 const submitButton = document.querySelector('.modal-img-button');
 const fileInputDiv = document.querySelector('.img-add');
-const addText = document.querySelector('.add-text');
-const imgIcon = document.querySelector('.imgIcon');
-const errorText = document.querySelector('.error');
-const fileInput = document.querySelector('.img-add input[type="file"]');
-const buttonAdd = document.querySelector('.button-add');
-const previewImg = document.getElementById('preview');
 const addInput = document.getElementById('add-image')
+const fileInput = document.querySelector('.img-add input[type="file"]');
+const previewImg = document.getElementById('preview');
 
-// Preview Picture
-function previewPicture() {
-  const elementsToHide = [buttonAdd, addText, imgIcon, errorText];
-  const elementsToShow = [previewImg];
-
-  hideElements(elementsToHide);
-  showElements(elementsToShow);
-
-  const picture = fileInput.files[0];
-  previewImg.src = URL.createObjectURL(picture);
-}
-
-// Remove Preview
-function removePreviewPicture() {
-  const elementsToHide = [previewImg];
-  const elementsToShow = [buttonAdd, addText, imgIcon, errorText];
-
-  showElements(elementsToShow);
-  hideElements(elementsToHide);
-
-  errorText.textContent = "";
-
-  previewImg.src = "";
-}
-
-// Reset Form
-function resetForm() {
-  addImgForm.reset();
-  removePreviewPicture();
-  hideValidationError(titleInput);
-  hideValidationError(categorySelect);
-  hideValidationError(fileInputDiv);
-  disableSubmit();
-}
 
 // Gestionnaire d'événements pour le changement de fichier
 fileInput.addEventListener('change', () => {
@@ -336,66 +224,6 @@ fileInput.addEventListener('change', () => {
 previewImg.addEventListener('click', () => {
   removePreviewPicture();
 });
-
-// Show Form Error
-function showValidationError(inputElement, submit = true, text = 'Ce champ doit être rempli') {
-  const errorElement = inputElement.parentNode.querySelector(`.error-message[data-input="${inputElement.id}"]`);
-  if (errorElement) {
-      return;
-  }
-
-  inputElement.classList.add('error-input');
-
-  const errorMessage = document.createElement('p');
-  errorMessage.classList.add('error-message');
-  errorMessage.textContent = text;
-  errorMessage.dataset.input = inputElement.id;
-  inputElement.parentNode.insertBefore(errorMessage, inputElement.nextSibling);
-  if (submit) {
-      disableSubmit();
-  }
-}
-
-// Hide Form Error
-function hideValidationError(inputElement, submit = true) {
-  inputElement.classList.remove('error-input');
-  const errorElement = inputElement.parentNode.querySelector(`.error-message[data-input="${inputElement.id}"]`);
-  if (errorElement) {
-      errorElement.parentNode.removeChild(errorElement);
-  }
-  if (submit) {
-      disableSubmit();
-  }
-}
-
-// Disable/Enable Submit
-function disableSubmit() {
-  const isTitleValid = titleInput.value.trim() !== '';
-  const isCategoryValid = categorySelect.value !== '';
-  const isFileValid = fileInput.value !== '';
-  const isFormValid = isTitleValid && isCategoryValid && isFileValid;
-  if (isFormValid) {
-      submitButton.classList.remove('disabled');
-  } else {
-      submitButton.classList.add('disabled');
-  }
-}
-
-// Check Form Validity
-function checkFormValidity(elements) {
-
-  elements.forEach(el => {
-      if(el.value.trim() === '') {
-          if(el.id==='') {
-              el = el.parentElement.parentElement;
-          }
-          showValidationError(el);
-      } else {
-          hideValidationError(el);
-      }
-  });
-  disableSubmit();
-}
 
 titleInput.addEventListener('input', function () {
   if (titleInput.value.trim() === '') {
