@@ -5,47 +5,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
   submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
-
+  
     checkLoginFormValidity(emailInput, passwordInput);
-
+  
     if (!emailInput.classList.contains('error-input') && !passwordInput.classList.contains('error-input')) {
       const email = emailInput.value;
       const password = passwordInput.value;
-
+  
       if (!validateEmail(email)) {
         showValidationError(emailInput, 'Format incorrect');
         return;
       }
-
+  
       const data = {
         email: email,
         password: password,
       };
-
-      try {
-        const response = await fetch('http://localhost:5678/api/users/login', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (response.ok) {
-          const responseData = await response.json();
+  
+      fetchLogin(data)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else if (response.status === 401) {
+            throw new Error('Adresse mail ou mot de passe invalide');
+          } else {
+            throw new Error('Erreur lors de la connexion');
+          }
+        })
+        .then(responseData => {
           const token = responseData.token;
           localStorage.setItem('token', token);
           window.location.href = 'index.html';
-        } else if (response.status === 401) {
-          throw new Error('Adresse mail ou mot de passe invalide');
-        } else {
-          throw new Error('Erreur lors de la connexion');
-        }
-      } catch (error) {
-        showValidationError(passwordInput, error.message);
-        passwordInput.value = '';
-      }
+        })
+        .catch(error => {
+          showValidationError(passwordInput, error.message);
+          passwordInput.value = '';
+        });
     }
   });
 
