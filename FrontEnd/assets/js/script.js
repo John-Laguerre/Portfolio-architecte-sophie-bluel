@@ -1,121 +1,110 @@
 // Fetch Works
-fetchWorks ()
-	.then(data => {
-		const portfolioSection = document.getElementById('portfolio');
-		const gallery = portfolioSection.querySelector('.gallery');
-		const modalOverlay = document.getElementById('modal-overlay');
-		const modalGallery = modalOverlay.querySelector('.modal-gallery');
+fetchWorks()
+    .then(data => {
+        const portfolioSection = document.getElementById('portfolio');
+        const gallery = portfolioSection.querySelector('.gallery');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
-		data.forEach(project => {
-			const projectID = project.id;
-			const projectTitle = project.title;
-			const projectImageUrl = project.imageUrl;
-			const projectCategoryID = project.categoryId;
+        data.forEach(project => {
+            const { id, title, imageUrl, categoryId } = project;
 
-			// Portfolio Gallery
-			const figure = document.createElement('figure');
-			const image = document.createElement('img');
-			const figcaption = document.createElement('figcaption');
+            // Portfolio Gallery
+            const figure = document.createElement('figure');
+            figure.dataset.category = categoryId;
+            figure.dataset.projectId = id;
 
-			figure.dataset.category = projectCategoryID;
-			figure.dataset.projectId = projectID;
+            const image = document.createElement('img');
+            image.src = imageUrl;
+            image.alt = title;
 
-			image.src = projectImageUrl;
-			image.alt = projectTitle;
-			figcaption.textContent = projectTitle;
+            const figcaption = document.createElement('figcaption');
+            figcaption.textContent = title;
 
-			figure.appendChild(image);
-			figure.appendChild(figcaption);
-			gallery.appendChild(figure);
+            figure.appendChild(image);
+            figure.appendChild(figcaption);
+            gallery.appendChild(figure);
 
-			// Modal Gallery
-			const modalGalleryDiv = document.createElement('div');
-			const modalGalleryImg = document.createElement('img');
-			const trashButton = document.createElement('a');
-			const trashIcon = document.createElement('i');
+            // Modal Gallery
+            const modalGalleryDiv = document.createElement('div');
+            modalGalleryDiv.style.position = 'relative';
 
-			modalGalleryDiv.style.position = "relative";
+            const modalGalleryImg = document.createElement('img');
+            modalGalleryImg.src = imageUrl;
+            modalGalleryImg.alt = title;
 
-			trashButton.classList.add('delete-icon');
-			trashButton.dataset.projectId = projectID;
+            const trashButton = document.createElement('a');
+            trashButton.classList.add('delete-icon');
+            trashButton.dataset.projectId = id;
 
-			modalGalleryImg.src = projectImageUrl;
-			modalGalleryImg.alt = projectTitle;
+            const trashIcon = document.createElement('i');
+            trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
 
-			trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
+            trashButton.appendChild(trashIcon);
+            modalGalleryDiv.appendChild(modalGalleryImg);
+            modalGalleryDiv.appendChild(trashButton);
+            modalGallery.appendChild(modalGalleryDiv);
+        });
 
-			modalGalleryDiv.appendChild(modalGalleryImg);
-			trashButton.appendChild(trashIcon);
-			modalGalleryDiv.appendChild(trashButton);
-			modalGallery.appendChild(modalGalleryDiv)
-		});
+        const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
 
-		const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
-
-		deleteIcons.forEach(deleteIcon => {
-			deleteIcon.addEventListener('click', () => {
-				const projectId = deleteIcon.dataset.projectId;
-
-				deleteProject(projectId);
-			});
-		});
-	})
-	.catch(error => {
-		console.error('Erreur lors de la récupération des données:', error);
-});
+        deleteIcons.forEach(deleteIcon => {
+            deleteIcon.addEventListener('click', () => {
+                const projectId = deleteIcon.dataset.projectId;
+                deleteProject(projectId);
+            });
+        });
+    })
+    .catch(error => {
+        console.error('Erreur lors de la récupération des données:', error);
+    });
 
 
 // Fetch Categories
-fetchCategory ()
-.then(data => {
-  const filterLinksContainer = document.querySelector('.filter__links');
+fetchCategory()
+    .then(data => {
+        const filterLinksContainer = document.querySelector('.filter__links');
 
-  // Créez le lien "Tous"
-  const allLien = document.createElement("a");
-  allLien.innerText = "Tous";
-  allLien.classList.add("filters");
-  allLien.dataset.category  = "all";
-  allLien.href = '#';
-  filterLinksContainer.appendChild(allLien);
+        // Créer le lien "Tous"
+        const allLink = document.createElement("a");
+        allLink.innerText = "Tous";
+        allLink.classList.add("filters");
+        allLink.dataset.category = "all";
+        allLink.href = '#';
+        filterLinksContainer.appendChild(allLink);
 
-  // Créez des boutons pour chaque catégorie en utilisant les données des catégories
-  data.forEach((category) => {
-    const allFilter = document.createElement("a");
-    const categoryID = category.id;
-		const categoryName = category.name;
+        // Créer des liens pour chaque catégorie en utilisant les données des catégories
+        data.forEach(category => {
+            const categoryLink = document.createElement("a");
+            categoryLink.innerText = category.name;
+            categoryLink.dataset.category = category.id;
+            categoryLink.classList.add("filters");
+            categoryLink.href = '#';
+            filterLinksContainer.appendChild(categoryLink);
 
-    allFilter.innerText = categoryName;
-    allFilter.dataset.category  = categoryID;
-    allFilter.classList.add("filters");
-    allFilter.href = '#';
-    filterLinksContainer.appendChild(allFilter);
+            const selectUpload = document.querySelector('#category');
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            selectUpload.appendChild(option);
+        });
 
-    const selectUpload = document.querySelector('#category');
-		const option = document.createElement('option');
-			option.value = categoryID;
-			option.textContent = categoryName;
+        const filterLinks = filterLinksContainer.querySelectorAll('.filters');
 
-			selectUpload.appendChild(option);
-			filterLinksContainer.appendChild(allFilter);
-  });
-
-  const filterLinks = filterLinksContainer.querySelectorAll('.filters'); // Sélectionnez par classe "filters"
-
-  filterLinks.forEach(allFilter => {
-    allFilter.addEventListener('click', function (e) {
-      e.preventDefault();
-      filterLinks.forEach(lnk => lnk.classList.remove('active'));
-      this.classList.add('active');
-      const selectedCategory = this.dataset.category; // Récupérez l'ID de la catégorie à partir de l'attribut "data-category"
-      filterProjects(selectedCategory);
-    });
-  });
-
-
-})
-.catch(error => {
-  console.error('Erreur lors de la récupération des données:', error);
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                filterLinks.forEach(lnk => lnk.classList.remove('active'));
+                this.classList.add('active');
+                const selectedCategory = this.dataset.category;
+                filterProjects(selectedCategory);
+            });
+        });
+  })
+  .catch(error => {
+        console.error('Erreur lors de la récupération des données:', error);
 });
+
 
 // mode édition
 
@@ -248,23 +237,24 @@ submitButton.addEventListener('click', async (e) => {
 
   if (!submitButton.classList.contains('disabled')) {
 
-    e.preventDefault();
-    const formData = new FormData();
+      e.preventDefault();
+      const formData = new FormData();
 
-    formData.append('image', fileInput.files[0]);
-    formData.append('title', titleInput.value);
-    formData.append('category', categorySelect.value);
+      formData.append('image', fileInput.files[0]);
+      formData.append('title', titleInput.value);
+      formData.append('category', categorySelect.value);
 
-    fetchSend(userToken, formData)
-      .then(response => response.json())
-      .then(data => {
-        const portfolioSection = document.getElementById('portfolio');
-        const gallery = portfolioSection.querySelector('.gallery');
-        const modalOverlay = document.getElementById('modal-overlay');
-        const modalGallery = modalOverlay.querySelector('.modal-gallery');
+      try {
+          const response = await fetchSend(userToken, formData);
+          const data = await response.json();
 
-        const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
-        hideElements(hide);
+          const portfolioSection = document.getElementById('portfolio');
+          const gallery = portfolioSection.querySelector('.gallery');
+          const modalOverlay = document.getElementById('modal-overlay');
+          const modalGallery = modalOverlay.querySelector('.modal-gallery');
+
+          const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
+          hideElements(hide);
 
           const figure = document.createElement('figure');
           const image = document.createElement('img');
@@ -303,17 +293,16 @@ submitButton.addEventListener('click', async (e) => {
           modalGallery.appendChild(modalGalleryDiv)
 
           trashButton.addEventListener('click', () => {
-            const projectId = trashButton.dataset.projectId;
-  
-            deleteProject(projectId);
+              const projectId = trashButton.dataset.projectId;
+
+              deleteProject(projectId);
           });
 
           console.log(data);
           resetForm();
-        }) 
-    .catch(err => {
-      console.error(err);
-    });
+      } catch (error) {
+          console.error(error);
+      }
   } else {
       e.preventDefault();
       if (titleInput.value.trim() === '') {
