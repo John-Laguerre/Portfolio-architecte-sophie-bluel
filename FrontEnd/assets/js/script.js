@@ -255,7 +255,7 @@ submitButton.addEventListener('click', async (e) => {
     formData.append('title', titleInput.value);
     formData.append('category', categorySelect.value);
 
-    fetchSend(userToken)
+    fetchSend(userToken, formData)
       .then(response => response.json())
       .then(data => {
         const portfolioSection = document.getElementById('portfolio');

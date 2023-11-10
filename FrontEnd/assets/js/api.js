@@ -34,7 +34,7 @@ async function fetchDelete(projectId, token) {
 }
 
 // Fetch Envoie des nouveaux travaux
-async function fetchSend(userToken) {
+async function fetchSend(userToken, formData) {
     return fetch('http://localhost:5678/api/works', {
 
         method: 'POST',
