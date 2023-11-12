@@ -1,53 +1,62 @@
-// Fetch Works
+// Chargement initial des données de projets
 fetchWorks()
     .then(data => {
+        // Sélection des éléments du DOM nécessaires
         const portfolioSection = document.getElementById('portfolio');
         const gallery = portfolioSection.querySelector('.gallery');
         const modalOverlay = document.getElementById('modal-overlay');
         const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
+        // Boucle sur les données des projets pour les afficher dans la galerie
         data.forEach(project => {
             const { id, title, imageUrl, categoryId } = project;
 
-            // Portfolio Gallery
+            // Création d'un élément pour la galerie principale
             const figure = document.createElement('figure');
             figure.dataset.category = categoryId;
             figure.dataset.projectId = id;
 
+            // Création d'une image pour le projet
             const image = document.createElement('img');
             image.src = imageUrl;
             image.alt = title;
 
+            // Création d'une légende pour l'image
             const figcaption = document.createElement('figcaption');
             figcaption.textContent = title;
 
+            // Ajout des éléments à la galerie principale
             figure.appendChild(image);
             figure.appendChild(figcaption);
             gallery.appendChild(figure);
 
-            // Modal Gallery
+            // Création d'un élément pour la galerie modale
             const modalGalleryDiv = document.createElement('div');
             modalGalleryDiv.style.position = 'relative';
 
+            // Création d'une image pour la galerie modale
             const modalGalleryImg = document.createElement('img');
             modalGalleryImg.src = imageUrl;
             modalGalleryImg.alt = title;
 
+            // Création d'un bouton de suppression pour la galerie modale
             const trashButton = document.createElement('a');
             trashButton.classList.add('delete-icon');
             trashButton.dataset.projectId = id;
 
+            // Création de l'icône de poubelle
             const trashIcon = document.createElement('i');
             trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
 
+            // Ajout des éléments à la galerie modale
             trashButton.appendChild(trashIcon);
             modalGalleryDiv.appendChild(modalGalleryImg);
             modalGalleryDiv.appendChild(trashButton);
             modalGallery.appendChild(modalGalleryDiv);
         });
 
+        // Écoute des événements de suppression dans la galerie modale
         const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
-
         deleteIcons.forEach(deleteIcon => {
             deleteIcon.addEventListener('click', () => {
                 const projectId = deleteIcon.dataset.projectId;
@@ -56,16 +65,16 @@ fetchWorks()
         });
     })
     .catch(error => {
-        console.error('Erreur lors de la récupération des données:', error);
-    });
+    console.error('Erreur lors de la récupération des données des projets:', error);
+});
 
-
-// Fetch Categories
+// Chargement des catégories pour les filtres
 fetchCategory()
     .then(data => {
+        // Sélection de l'élément DOM pour les liens de filtre
         const filterLinksContainer = document.querySelector('.filter__links');
 
-        // Créer le lien "Tous"
+        // Création du lien "Tous"
         const allLink = document.createElement("a");
         allLink.innerText = "Tous";
         allLink.classList.add("filters");
@@ -73,7 +82,7 @@ fetchCategory()
         allLink.href = '#';
         filterLinksContainer.appendChild(allLink);
 
-        // Créer des liens pour chaque catégorie en utilisant les données des catégories
+        // Boucle sur les données des catégories pour créer les liens de filtre
         data.forEach(category => {
             const categoryLink = document.createElement("a");
             categoryLink.innerText = category.name;
@@ -82,6 +91,7 @@ fetchCategory()
             categoryLink.href = '#';
             filterLinksContainer.appendChild(categoryLink);
 
+            // Création des options pour le menu déroulant de téléchargement
             const selectUpload = document.querySelector('#category');
             const option = document.createElement('option');
             option.value = category.id;
@@ -89,26 +99,28 @@ fetchCategory()
             selectUpload.appendChild(option);
         });
 
+        // Écoute des événements de clic sur les liens de filtre
         const filterLinks = filterLinksContainer.querySelectorAll('.filters');
-
         filterLinks.forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
+                // Suppression de la classe 'active' de tous les liens de filtre
                 filterLinks.forEach(lnk => lnk.classList.remove('active'));
+                // Ajout de la classe 'active' au lien de filtre actuel
                 this.classList.add('active');
+                // Filtrage des projets en fonction de la catégorie sélectionnée
                 const selectedCategory = this.dataset.category;
                 filterProjects(selectedCategory);
             });
         });
-  })
-  .catch(error => {
-        console.error('Erreur lors de la récupération des données:', error);
+    })
+    .catch(error => {
+    console.error('Erreur lors de la récupération des données des catégories:', error);
 });
 
+// Mode édition
 
-// mode édition
-
-// Sélection des éléments de l'interface utilisateur pour le mode édition
+// Sélection des éléments du DOM
 const header = document.querySelector('header');
 const loginLink = document.querySelector(".login-link");
 const logoutLink = document.querySelector(".logout-link");
@@ -141,9 +153,9 @@ if (logoutLink) {
     // L'utilisateur est connecté, affichez le mode édition
     showElements([modeEditOverlay]);
     editModif.classList.remove('display-none');
-    loginLink.style.display = 'none'; // Masquez le lien de connexion
-    logoutLink.style.display = 'block'; // Affichez le lien de déconnexion
-    header.style.marginTop = '109px'; // Ajoutez une marge au header
+    loginLink.style.display = 'none';
+    logoutLink.style.display = 'block';
+    header.style.marginTop = '109px';
     portfoliotext.style.marginBottom = '100px';
 
     // Sélectionnez tous les icônes avec aria-hidden="true" et définissez-les sur "false"
@@ -154,8 +166,8 @@ if (logoutLink) {
     filterLinkContainer.style.display = "none";
   } else {
     // L'utilisateur n'est pas connecté
-    loginLink.style.display = "block"; // Affichez le lien de connexion
-    logoutLink.style.display = "none"; // Masquez le lien de déconnexion
+    loginLink.style.display = "block";
+    logoutLink.style.display = "none";
   }
 
   // Gestionnaire d'événements pour ouvrir la modale au clic sur le bouton "Modifier"
@@ -175,6 +187,7 @@ if (logoutLink) {
     }
   });
 
+  // Gestionnaire d'événements pour passer à la page suivante dans la modale
   nextPage.addEventListener('click', function () {
     const hide = [modalGalleryTitle, modalGallery, hrModalGallery, nextPage];
     hideElements(hide);
@@ -183,6 +196,7 @@ if (logoutLink) {
     showElements(show);
   });
 
+  // Gestionnaire d'événements pour revenir à la page principale dans la modale
   modalArrowButton.addEventListener('click', function () {
     const show = [modalGalleryTitle, modalGallery, hrModalGallery, nextPage];
     showElements(show);
@@ -192,7 +206,7 @@ if (logoutLink) {
   });
 }
 
-// modal
+// Modal gallery
 
 // Sélection des éléments pour la navigation et la gestion du modal de galerie
 const titleInput = document.getElementById('title');
@@ -216,103 +230,113 @@ previewImg.addEventListener('click', () => {
   removePreviewPicture();
 });
 
+// Gestionnaire d'événements pour la validation du champ titre
 titleInput.addEventListener('input', function () {
   if (titleInput.value.trim() === '') {
-      showValidationError(titleInput);
+    showValidationError(titleInput);
   } else {
-      hideValidationError(titleInput);
+    hideValidationError(titleInput);
   }
 });
 
+// Gestionnaire d'événements pour la validation du champ catégorie
 categorySelect.addEventListener('change', function () {
   if (categorySelect.value === '') {
-      showValidationError(categorySelect);
+    showValidationError(categorySelect);
   } else {
-      hideValidationError(categorySelect);
+    hideValidationError(categorySelect);
   }
 });
 
+// Gestionnaire d'événements pour le clic sur le bouton de soumission
 submitButton.addEventListener('click', async (e) => {
+  // Vérifie la validité du formulaire
   checkFormValidity([fileInput, titleInput, categorySelect]);
 
   if (!submitButton.classList.contains('disabled')) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('image', fileInput.files[0]);
+    formData.append('title', titleInput.value);
+    formData.append('category', categorySelect.value);
 
-      e.preventDefault();
-      const formData = new FormData();
+    try {
+      // Envoie des données au serveur
+      const response = await fetchSend(userToken, formData);
+      const data = await response.json();
 
-      formData.append('image', fileInput.files[0]);
-      formData.append('title', titleInput.value);
-      formData.append('category', categorySelect.value);
+      // Sélection des éléments du DOM
+      const portfolioSection = document.getElementById('portfolio');
+      const gallery = portfolioSection.querySelector('.gallery');
+      const modalOverlay = document.getElementById('modal-overlay');
+      const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
-      try {
-          const response = await fetchSend(userToken, formData);
-          const data = await response.json();
+      // Masque les éléments de la modale
+      const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
+      hideElements(hide);
 
-          const portfolioSection = document.getElementById('portfolio');
-          const gallery = portfolioSection.querySelector('.gallery');
-          const modalOverlay = document.getElementById('modal-overlay');
-          const modalGallery = modalOverlay.querySelector('.modal-gallery');
+      const { id, title, imageUrl, categoryId } = data;
 
-          const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
-          hideElements(hide);
+      // Portfolio Gallery
+      const figure = document.createElement('figure');
+      figure.dataset.category = categoryId;
+      figure.dataset.projectId = id;
 
-          const figure = document.createElement('figure');
-          const image = document.createElement('img');
-          const figcaption = document.createElement('figcaption');
+      const image = document.createElement('img');
+      image.src = imageUrl;
+      image.alt = title;
 
-          figure.dataset.category = categorySelect.value;
-          figure.dataset.projectId = data.id;
+      const figcaption = document.createElement('figcaption');
+      figcaption.textContent = title;
 
-          image.src = URL.createObjectURL(fileInput.files[0]);
-          image.alt = titleInput.value;
-          figcaption.textContent = titleInput.value;
+      figure.appendChild(image);
+      figure.appendChild(figcaption);
+      gallery.appendChild(figure);
 
-          figure.appendChild(image);
-          figure.appendChild(figcaption);
-          gallery.appendChild(figure);
+      // Modal Gallery
+      const modalGalleryDiv = document.createElement('div');
+      modalGalleryDiv.style.position = 'relative';
 
-          // Modal Gallery
-          const modalGalleryDiv = document.createElement('div');
-          const modalGalleryImg = document.createElement('img');
-          const trashButton = document.createElement('a');
-          const trashIcon = document.createElement('i');
+      const modalGalleryImg = document.createElement('img');
+      modalGalleryImg.src = imageUrl;
+      modalGalleryImg.alt = title;
 
-          modalGalleryDiv.style.position = "relative";
+      const trashButton = document.createElement('a');
+      trashButton.classList.add('delete-icon');
+      trashButton.dataset.projectId = id;
 
-          trashButton.classList.add('delete-icon');
-          trashButton.dataset.projectId = data.id;
+      const trashIcon = document.createElement('i');
+      trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
 
-          modalGalleryImg.src = URL.createObjectURL(fileInput.files[0]);
-          modalGalleryImg.alt = titleInput.value;
+      trashButton.appendChild(trashIcon);
+      modalGalleryDiv.appendChild(modalGalleryImg);
+      modalGalleryDiv.appendChild(trashButton);
+      modalGallery.appendChild(modalGalleryDiv);
 
-          trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
+      // Gestionnaire d'événements pour supprimer un projet
+      trashButton.addEventListener('click', () => {
+        const projectId = trashButton.dataset.projectId;
+        deleteProject(projectId);
+      });
 
-          modalGalleryDiv.appendChild(modalGalleryImg);
-          trashButton.appendChild(trashIcon);
-          modalGalleryDiv.appendChild(trashButton);
-          modalGallery.appendChild(modalGalleryDiv)
+      console.log(data);
+      // Réinitialise le formulaire
+      resetForm();
 
-          trashButton.addEventListener('click', () => {
-              const projectId = trashButton.dataset.projectId;
-
-              deleteProject(projectId);
-          });
-
-          console.log(data);
-          resetForm();
-      } catch (error) {
-          console.error(error);
-      }
+    } catch (error) {
+      console.error(error);
+    }
   } else {
-      e.preventDefault();
-      if (titleInput.value.trim() === '') {
-          showValidationError(titleInput);
-      }
-      if (categorySelect.value === '') {
-          showValidationError(categorySelect);
-      }
-      if (fileInput.value === '') {
-          showValidationError(fileInputDiv);
-      }
+    // Empêche la soumission du formulaire si des erreurs sont présentes
+    e.preventDefault();
+    if (titleInput.value.trim() === '') {
+      showValidationError(titleInput);
+    }
+    if (categorySelect.value === '') {
+      showValidationError(categorySelect);
+    }
+    if (fileInput.value === '') {
+      showValidationError(fileInputDiv);
+    }
   }
 });
