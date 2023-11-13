@@ -34,7 +34,7 @@ function toggleElements(elements, visible) {
     });
 }
 
-// Filter
+// Filtrer les projets
 function filterProjects(category) {
 	const gallery = document.querySelector('.gallery');
 	const projects = gallery.querySelectorAll('figure');
@@ -74,7 +74,7 @@ function deleteProject(projectId) {
     });
 }
 
-// Preview Picture
+// Prévisualisation de l'image
 function previewPicture() {
   const elementsToHide = [buttonAdd, addText, imgIcon, errorText];
   const elementsToShow = [previewImg];
@@ -86,7 +86,7 @@ function previewPicture() {
   previewImg.src = URL.createObjectURL(picture);
 }
 
-// Remove Preview
+// Supprimer la prévisualisation
 function removePreviewPicture() {
   const elementsToHide = [previewImg];
   const elementsToShow = [buttonAdd, addText, imgIcon, errorText];
@@ -99,7 +99,7 @@ function removePreviewPicture() {
   previewImg.src = "";
 }
 
-// Reset Form
+// Réinitialiser le formulaire
 function resetForm() {
   addImgForm.reset();
   removePreviewPicture();
@@ -153,7 +153,7 @@ function disableSubmit() {
     }
 }
 
-// Check Form Validity
+// Vérifier la validité du formulaire
 function checkFormValidity(elements) {
 
   elements.forEach(el => {
