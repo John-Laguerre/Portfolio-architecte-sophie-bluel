@@ -1,4 +1,4 @@
-// Chargement initial des données de projets
+// Fetch Works
 fetchWorks()
     .then(data => {
         // Sélection des éléments du DOM nécessaires
@@ -68,7 +68,7 @@ fetchWorks()
     console.error('Erreur lors de la récupération des données des projets:', error);
 });
 
-// Chargement des catégories pour les filtres
+// Fetch Category
 fetchCategory()
     .then(data => {
         // Sélection de l'élément DOM pour les liens de filtre
@@ -265,59 +265,8 @@ submitButton.addEventListener('click', async (e) => {
       const response = await fetchSend(userToken, formData);
       const data = await response.json();
 
-      // Sélection des éléments du DOM
-      const portfolioSection = document.getElementById('portfolio');
-      const gallery = portfolioSection.querySelector('.gallery');
-      const modalOverlay = document.getElementById('modal-overlay');
-      const modalGallery = modalOverlay.querySelector('.modal-gallery');
-
-      // Masque les éléments de la modale
-      const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
-      hideElements(hide);
-
-      const { id, title, imageUrl, categoryId } = data;
-
-      // Portfolio Gallery
-      const figure = document.createElement('figure');
-      figure.dataset.category = categoryId;
-      figure.dataset.projectId = id;
-
-      const image = document.createElement('img');
-      image.src = imageUrl;
-      image.alt = title;
-
-      const figcaption = document.createElement('figcaption');
-      figcaption.textContent = title;
-
-      figure.appendChild(image);
-      figure.appendChild(figcaption);
-      gallery.appendChild(figure);
-
-      // Modal Gallery
-      const modalGalleryDiv = document.createElement('div');
-      modalGalleryDiv.style.position = 'relative';
-
-      const modalGalleryImg = document.createElement('img');
-      modalGalleryImg.src = imageUrl;
-      modalGalleryImg.alt = title;
-
-      const trashButton = document.createElement('a');
-      trashButton.classList.add('delete-icon');
-      trashButton.dataset.projectId = id;
-
-      const trashIcon = document.createElement('i');
-      trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
-
-      trashButton.appendChild(trashIcon);
-      modalGalleryDiv.appendChild(modalGalleryImg);
-      modalGalleryDiv.appendChild(trashButton);
-      modalGallery.appendChild(modalGalleryDiv);
-
-      // Gestionnaire d'événements pour supprimer un projet
-      trashButton.addEventListener('click', () => {
-        const projectId = trashButton.dataset.projectId;
-        deleteProject(projectId);
-      });
+     // Appel de la fonction pour mettre à jour le DOM avec les données
+     Updatewithdata(data)
 
       console.log(data);
       // Réinitialise le formulaire
