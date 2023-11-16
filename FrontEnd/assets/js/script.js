@@ -8,7 +8,7 @@ fetchWorks()
         const modalOverlay = document.getElementById('modal-overlay');
         const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
-        // Boucle sur les données des projets
+        // Boucle sur les données du tableaux des projets
         data.forEach(project => {
 
             const { id, title, imageUrl, categoryId } = project;
@@ -60,12 +60,12 @@ fetchWorks()
 
         const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
 
-        // boucle sur les donnée deleteIcon
+        // Boucle sur les donnée du tableaux deleteIcon
         deleteIcons.forEach(deleteIcon => {
 
-          // suppression dans la galerie modale
+          // Suppression dans la galerie modale
           deleteIcon.addEventListener('click', () => {
-            
+
             const projectId = deleteIcon.dataset.projectId;
             deleteProject(projectId);
           });
@@ -102,7 +102,7 @@ fetchCategory()
             categoryLink.classList.add("filters");
             categoryLink.href = '#';
 
-            // ajout de l'élément enfant dans le parent
+            // Ajout de l'élément enfant dans le parent
             filterLinksContainer.appendChild(categoryLink);
 
 
@@ -113,7 +113,7 @@ fetchCategory()
             option.value = category.id;
             option.textContent = category.name;
 
-            // ajout de l'élément dans le selectUpload
+            // Ajout de l'élément dans le selectUpload
             selectUpload.appendChild(option);
         });
 
