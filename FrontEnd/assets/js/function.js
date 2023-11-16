@@ -1,4 +1,4 @@
-// Fonction pour modifier l'attribut aria-hidden des éléments
+// Fonction modifier l'attribut aria-hidden des éléments
 function updateAriaHidden(elements, value) {
   elements.forEach(element => {
     if (element) {
@@ -7,7 +7,7 @@ function updateAriaHidden(elements, value) {
   });
 }
 
-// Fonction pour masquer les éléments
+// Fonction masquer les éléments
 function hideElements(elements) {
     elements.forEach(element => {
       if (element && element.classList) {
@@ -16,7 +16,7 @@ function hideElements(elements) {
     });
   }
   
-// Fonction pour afficher les éléments
+// Fonction afficher les éléments
 function showElements(elements) {
     elements.forEach (element => {
       if (element && element.classList) {
@@ -25,7 +25,7 @@ function showElements(elements) {
     });
 }
   
-// Fonction pour basculer l'affichage des éléments
+// Fonction basculer l'affichage des éléments
 function toggleElements(elements, visible) {
     elements.forEach(element => {
       if (element && element.classList) {
@@ -52,8 +52,9 @@ function filterProjects(category) {
 	});
 }
 
-// Fonction pour supprimer un projet
+// Fonction supprimer un projet
 function deleteProject(projectId) {
+
   const token = localStorage.getItem("token");
   const elementDeleted = document.querySelector(`.delete-icon[data-project-id="${projectId}"]`);
   const portfolioDeleted = document.querySelector(`figure[data-project-id="${projectId}"]`);
@@ -73,6 +74,8 @@ function deleteProject(projectId) {
       console.log('Une erreur s\'est produite lors de la communication avec l\'API :', error);
     });
 }
+
+// Fonction mise à jour du DOM aprés envois
 function Updatewithdata(data) {
   
    // Sélection des éléments du DOM
@@ -87,7 +90,7 @@ function Updatewithdata(data) {
 
    const { id, title, imageUrl, categoryId } = data;
 
-   // Portfolio Gallery
+   // Galerie principale
    const figure = document.createElement('figure');
    figure.dataset.category = categoryId;
    figure.dataset.projectId = id;
@@ -99,6 +102,7 @@ function Updatewithdata(data) {
    const figcaption = document.createElement('figcaption');
    figcaption.textContent = title;
 
+   // Ajout dans galerie 
    figure.appendChild(image);
    figure.appendChild(figcaption);
    gallery.appendChild(figure);
@@ -118,12 +122,13 @@ function Updatewithdata(data) {
    const trashIcon = document.createElement('i');
    trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
 
+  // Ajout dans la galerie modale
    trashButton.appendChild(trashIcon);
    modalGalleryDiv.appendChild(modalGalleryImg);
    modalGalleryDiv.appendChild(trashButton);
    modalGallery.appendChild(modalGalleryDiv);
 
-   // Gestionnaire d'événements pour supprimer un projet
+   // Supprimer un projet
    trashButton.addEventListener('click', () => {
      const projectId = trashButton.dataset.projectId;
      deleteProject(projectId);
@@ -165,7 +170,7 @@ function resetForm() {
   disableSubmit();
 }
 
-// Fonction pour afficher un message d'erreur dans le formulaire
+// Fonction afficher un message d'erreur dans le formulaire
 function showValidationError(inputElement, submit = true, text = 'Ce champ doit être rempli') {
     const errorElement = inputElement.parentNode.querySelector(`.error-message[data-input="${inputElement.id}"]`);
     if (errorElement) {
@@ -184,7 +189,7 @@ function showValidationError(inputElement, submit = true, text = 'Ce champ doit 
     }
 }
   
-// Fonction pour masquer un message d'erreur dans le formulaire
+// Fonction masquer un message d'erreur dans le formulaire
 function hideValidationError(inputElement, submit = true) {
     inputElement.classList.remove('error-input');
     const errorElement = inputElement.parentNode.querySelector(`.error-message[data-input="${inputElement.id}"]`);
@@ -196,7 +201,7 @@ function hideValidationError(inputElement, submit = true) {
     }
 }
   
-// Fonction pour désactiver ou activer le bouton de soumission du formulaire
+// Fonction désactiver ou activer le bouton de soumission du formulaire
 function disableSubmit() {
     const isTitleValid = titleInput.value.trim() !== '';
     const isCategoryValid = categorySelect.value !== '';
@@ -225,7 +230,7 @@ function checkFormValidity(elements) {
   disableSubmit();
 }
 
-// Fonction pour vérifier la validité du formulaire de connexion
+// Fonction vérifier la validité du formulaire de connexion
 function checkLoginFormValidity(email, password) {
     if (email.value.trim() === '') {
       showValidationError(email, false);
@@ -242,7 +247,7 @@ function checkLoginFormValidity(email, password) {
     }
 }
   
-// Fonction pour valider le format d'une adresse e-mail
+// Fonction valider le format d'une adresse e-mail
 function validateEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
