@@ -8,7 +8,7 @@ fetchWorks()
         const modalOverlay = document.getElementById('modal-overlay');
         const modalGallery = modalOverlay.querySelector('.modal-gallery');
 
-        // Boucle sur les données du tableaux des projets
+        // Boucle sur les données de la notelist data
         data.forEach(project => {
 
             const { id, title, imageUrl, categoryId } = project;
@@ -60,7 +60,7 @@ fetchWorks()
 
         const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
 
-        // Boucle sur les donnée du tableaux deleteIcon
+        // Boucle sur les donnée de la noteList deleteIcons
         deleteIcons.forEach(deleteIcon => {
 
           // Suppression dans la galerie modale
@@ -91,7 +91,7 @@ fetchCategory()
         // Ajout de l'élément allLink dans le parent
         filterLinksContainer.appendChild(allLink);
 
-        // Boucle sur les données du tableaux des catégories pour créer les liens de filtre
+        // Boucle sur les données de la noteList data avec ça fonction fléché category
         data.forEach(category => {
 
             const categoryLink = document.createElement("a");
@@ -119,13 +119,13 @@ fetchCategory()
         // Écoute des événements de clic sur les liens de filtre
         const filterLinks = filterLinksContainer.querySelectorAll('.filters');
 
-        // Boucle sur les donnée du tableaux filterlinks
+        // Boucle sur les donnée de la noteList filterlinks avec fonction fléché 
         filterLinks.forEach(link => {
 
             link.addEventListener('click', function (e) {
                 e.preventDefault();
 
-                // Suppression de la classe (active) de tous les liens de filtre
+                // bSuppression de la classe (active) de tous les liens de filtre
                 filterLinks.forEach(lnk => lnk.classList.remove('active'));
 
                 // Ajout de la classe (active) au lien de filtre actuel
