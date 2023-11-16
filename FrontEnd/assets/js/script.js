@@ -296,7 +296,7 @@ submitButton.addEventListener('click', async (e) => {
       const response = await fetchSend(userToken, formData);
       const data = await response.json();
 
-     // Appel de la fonction pour mettre à jour le DOM avec les données
+     // Appel de la fonction mettre à jour le DOM
      Updatewithdata(data)
 
       console.log(data);
