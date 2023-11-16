@@ -65,7 +65,6 @@ fetchWorks()
 
           // Suppression dans la galerie modale
           deleteIcon.addEventListener('click', () => {
-
             const projectId = deleteIcon.dataset.projectId;
             deleteProject(projectId);
           });
