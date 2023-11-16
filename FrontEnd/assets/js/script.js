@@ -125,10 +125,10 @@ fetchCategory()
             link.addEventListener('click', function (e) {
                 e.preventDefault();
 
-                // bSuppression de la classe (active) de tous les liens de filtre
+                // Boucle sur les donnée de la noteList et on parcourt tous les liens de filtre et on leur enlève la classe "active".
                 filterLinks.forEach(lnk => lnk.classList.remove('active'));
 
-                // Ajout de la classe (active) au lien de filtre actuel
+                // Le lien de filtre actuellement cliqué se voit attribuer la classe "active".
                 this.classList.add('active');
 
                 // Filtrage des projets en fonction de la catégorie sélectionnée
