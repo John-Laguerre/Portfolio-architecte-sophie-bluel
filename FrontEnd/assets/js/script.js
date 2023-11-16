@@ -92,7 +92,7 @@ fetchCategory()
         // Ajout de l'élément allLink dans le parent
         filterLinksContainer.appendChild(allLink);
 
-        // Boucle sur les données des catégories pour créer les liens de filtre
+        // Boucle sur les données du tableaux des catégories pour créer les liens de filtre
         data.forEach(category => {
 
             const categoryLink = document.createElement("a");
@@ -120,7 +120,7 @@ fetchCategory()
         // Écoute des événements de clic sur les liens de filtre
         const filterLinks = filterLinksContainer.querySelectorAll('.filters');
 
-        // Boucle sur les donnée filterlinks
+        // Boucle sur les donnée du tableaux filterlinks
         filterLinks.forEach(link => {
 
             link.addEventListener('click', function (e) {
