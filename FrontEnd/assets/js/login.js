@@ -1,12 +1,12 @@
 // Attend que le DOM soit entièrement chargé avant d'exécuter le code
 document.addEventListener('DOMContentLoaded', function () {
   
-  // Récupère les éléments du formulaire
+  // Récupère les éléments du DOM
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
   const submitButton = document.getElementById('login-submit');
 
-  // Ajoute un gestionnaire d'événements au clic sur le bouton de soumission
+  // Clic sur le bouton de submitButton
   submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
 
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         password: password,
       };
 
-      // Effectue la requête de connexion
+      // appel la fonction fetchlogin avec le paramétre (data)
       fetchLogin(data)
         .then(response => {
           // Si la connexion réussit, traite la réponse
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Récupère le lien de connexion dans la barre de navigation
+  // Récupère de l'élément du DOM
   const loginLink = document.querySelector(".login-link");
 
   // Récupère le nom de la page actuellement affichée dans l'URL
