@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Clic sur le bouton de submitButton
   submitButton.addEventListener('click', async (e) => {
+
+    // 
     e.preventDefault();
 
     // Vérifie la validité du formulaire de connexion
