@@ -58,16 +58,17 @@ fetchWorks()
             modalGallery.appendChild(modalGalleryDiv);
         });
 
-        // Écoute des événements de suppression dans la galerie modale
         const deleteIcons = document.querySelectorAll('.modal-gallery a.delete-icon');
 
         // boucle sur les donnée deleteIcon
         deleteIcons.forEach(deleteIcon => {
 
-            deleteIcon.addEventListener('click', () => {
-                const projectId = deleteIcon.dataset.projectId;
-                deleteProject(projectId);
-            });
+          // suppression dans la galerie modale
+          deleteIcon.addEventListener('click', () => {
+            
+            const projectId = deleteIcon.dataset.projectId;
+            deleteProject(projectId);
+          });
         });
     })
     .catch(error => {
