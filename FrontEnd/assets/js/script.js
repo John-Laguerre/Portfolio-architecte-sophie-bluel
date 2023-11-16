@@ -116,7 +116,7 @@ fetchCategory()
             selectUpload.appendChild(option);
         });
 
-        // Écoute des événements de clic sur les liens de filtre
+        // Récupére l'élément du DOM
         const filterLinks = filterLinksContainer.querySelectorAll('.filters');
 
         // Boucle sur les donnée de la noteList filterlinks avec fonction fléché 
@@ -130,7 +130,7 @@ fetchCategory()
 
                 // Le lien de filtre actuellement cliqué se voit attribuer la classe "active".
                 this.classList.add('active');
-
+                
                 // Filtrage des projets en fonction de la catégorie sélectionnée
                 const selectedCategory = this.dataset.category;
                 filterProjects(selectedCategory);
