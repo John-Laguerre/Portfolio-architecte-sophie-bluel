@@ -165,6 +165,7 @@ const userToken = window.localStorage.getItem("token");
 
 if (logoutLink) {
 
+                                          // Déconnexion de l'utilisateur
   logoutLink.addEventListener("click", function () {
 
     // Supprime le token de l'utilisateur du stockage local
@@ -174,7 +175,7 @@ if (logoutLink) {
     window.location.href = 'login.html';
   });
 
-                                          // Gestion du mode administrateur
+                                          // Vérification de la connexion de l'utilisateur
   
   if (localStorage.getItem("token")) {
 
