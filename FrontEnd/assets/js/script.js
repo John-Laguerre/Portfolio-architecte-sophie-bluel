@@ -174,6 +174,7 @@ if (logoutLink) {
     window.location.href = 'login.html';
   });
 
+                                          // Gestion du mode administrateur
   
   if (localStorage.getItem("token")) {
 
@@ -199,6 +200,8 @@ if (logoutLink) {
     logoutLink.style.display = "none";
   }
 
+                                        // Gestion de l'ouverture et de la fermeture de la modale
+
   // Ouvrir la modale au clic sur le bouton "Modifier"
   editModif.addEventListener("click", function () {
     showElements([modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage]);
@@ -215,6 +218,8 @@ if (logoutLink) {
       hideElements([modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton]);
     }
   });
+
+                                                  // Gestion de navigation dans la modale
 
   // Gestionnaire d'événements pour passer à la page suivante dans la modale
   nextPage.addEventListener('click', function () {
