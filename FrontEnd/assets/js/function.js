@@ -246,7 +246,7 @@ function checkLoginFormValidity(email, password) {
       hideValidationError(password, false);
     }
 }
-  
+
 // Fonction valider le format d'une adresse e-mail
 function validateEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
