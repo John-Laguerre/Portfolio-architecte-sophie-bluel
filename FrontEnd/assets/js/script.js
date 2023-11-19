@@ -298,18 +298,17 @@ submitButton.addEventListener('click', async (e) => {
     formData.append('category', categorySelect.value);
 
     try {
-
       // Envoie des données au serveur
       const response = await fetchSend(userToken, formData);
       const data = await response.json();
 
-     // Appel de la fonction mettre à jour le DOM
-     Updatewithdata(data)
+      // Appel de la fonction mettre à jour le DOM
+      Updatewithdata(data);
 
       console.log(data);
+
       // Réinitialise le formulaire
       resetForm();
-
     } catch (error) {
       console.error(error);
     }
