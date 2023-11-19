@@ -75,65 +75,58 @@ function deleteProject(projectId) {
     });
 }
 
-// Fonction mise à jour du DOM aprés envois
-function Updatewithdata(data) {
-  
-   // Sélection des éléments du DOM
-   const portfolioSection = document.getElementById('portfolio');
-   const gallery = portfolioSection.querySelector('.gallery');
-   const modalOverlay = document.getElementById('modal-overlay');
-   const modalGallery = modalOverlay.querySelector('.modal-gallery');
+function Updatewithdata(project) {
+  const { id, title, imageUrl, categoryId } = project;
 
-   // Masque les éléments de la modale
-   const hide = [modalOverlay, modalGalleryTitle, modalGallery, hrModalGallery, nextPage, modalAddTitle, addImgForm, modalArrowButton];
-   hideElements(hide);
+  // Galerie principale
+  const gallery = document.getElementById('portfolio').querySelector('.gallery');
+  const figure = document.createElement('figure');
+  figure.dataset.category = categoryId;
+  figure.dataset.projectId = id;
 
-   const { id, title, imageUrl, categoryId } = data;
+  const image = document.createElement('img');
+  image.src = imageUrl;
+  image.alt = title;
 
-   // Galerie principale
-   const figure = document.createElement('figure');
-   figure.dataset.category = categoryId;
-   figure.dataset.projectId = id;
+  const figcaption = document.createElement('figcaption');
+  figcaption.textContent = title;
 
-   const image = document.createElement('img');
-   image.src = imageUrl;
-   image.alt = title;
+  // Ajout dans galerie principale
+  figure.appendChild(image);
+  figure.appendChild(figcaption);
+  gallery.appendChild(figure);
 
-   const figcaption = document.createElement('figcaption');
-   figcaption.textContent = title;
+  // Galerie modale
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalGallery = modalOverlay.querySelector('.modal-gallery');
+  const modalGalleryDiv = document.createElement('div');
+  modalGalleryDiv.style.position = 'relative';
 
-   // Ajout dans galerie 
-   figure.appendChild(image);
-   figure.appendChild(figcaption);
-   gallery.appendChild(figure);
+  const modalGalleryImg = document.createElement('img');
+  modalGalleryImg.src = imageUrl;
+  modalGalleryImg.alt = title;
 
-   // Modal Gallery
-   const modalGalleryDiv = document.createElement('div');
-   modalGalleryDiv.style.position = 'relative';
+  // Création du lien de suppression pour la galerie modale
+  const trashButton = document.createElement('a');
+  trashButton.classList.add('delete-icon');
+  trashButton.dataset.projectId = id;
 
-   const modalGalleryImg = document.createElement('img');
-   modalGalleryImg.src = imageUrl;
-   modalGalleryImg.alt = title;
-
-   const trashButton = document.createElement('a');
-   trashButton.classList.add('delete-icon');
-   trashButton.dataset.projectId = id;
-
-   const trashIcon = document.createElement('i');
-   trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
+  // Création de l'icône de poubelle
+  const trashIcon = document.createElement('i');
+  trashIcon.classList.add('fa-solid', 'fa-trash-can', 'fa-2xs');
 
   // Ajout dans la galerie modale
-   trashButton.appendChild(trashIcon);
-   modalGalleryDiv.appendChild(modalGalleryImg);
-   modalGalleryDiv.appendChild(trashButton);
-   modalGallery.appendChild(modalGalleryDiv);
+  trashButton.appendChild(trashIcon);
+  modalGalleryDiv.appendChild(modalGalleryImg);
+  modalGalleryDiv.appendChild(trashButton);
+  modalGallery.appendChild(modalGalleryDiv);
 
-   // Supprimer un projet
-   trashButton.addEventListener('click', () => {
-     const projectId = trashButton.dataset.projectId;
-     deleteProject(projectId);
-   });
+  // Supprimer un projet (pour la galerie modale)
+  trashButton.addEventListener('click', () => {
+      deleteProject(id);
+  });
 }
+
 
 // Prévisualisation de l'image
 function previewPicture() {
