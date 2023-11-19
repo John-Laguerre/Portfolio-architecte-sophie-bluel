@@ -284,6 +284,7 @@ categorySelect.addEventListener('change', function () {
 
 // Click sur le bouton de submitButton
 submitButton.addEventListener('click', async (e) => {
+  e.preventDefault();
 
   // Vérifie la validité du formulaire
   checkFormValidity([fileInput, titleInput, categorySelect]);
