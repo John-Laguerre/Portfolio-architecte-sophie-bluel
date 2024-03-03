@@ -5,7 +5,7 @@
 
 # English
 
-# Information to launch the code
+## Information to launch the code
 
 - Launch the backend from your terminal by following the instructions in the ReadMe file.
 
@@ -13,7 +13,7 @@
 
 # Francais
 
-# Information pour lancer le code
+## Information pour lancer le code
 
  - Lancer le backend depuis votre terminal en suivant les instruction du fichier ReadMe.
    
