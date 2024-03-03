@@ -1,6 +1,7 @@
 # Portfolio-architecte-sophie-bluel
 
-Code du projet 6 d'intégrateur web.
+<img width="597" alt="Capture d’écran 2024-03-03 à 17 11 11" src="https://github.com/John-Laguerre/Portfolio-architecte-sophie-bluel/assets/137527343/506f8072-3bcb-4ff6-b27c-527f42e7e4f2">
+
 
 # English
 
